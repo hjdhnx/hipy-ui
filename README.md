@@ -2,7 +2,8 @@
 
 ##### 技术栈:  vue2 | ruoyi | element-ui
 
-[套装传送门:hipy-server](https://github.com/hjdhnx/hipy-server/)
+[套装传送门:hipy-server](https://github.com/hjdhnx/hipy-server/)  
+[巨人的肩膀](https://github.com/JohnDoe1996/fastAPI-vue)
 
 1. 安装node、npm  
    [去这里下载](https://registry.npmmirror.com/binary.html?path=node/v16.19.1/)
