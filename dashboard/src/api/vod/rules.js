@@ -19,6 +19,14 @@ export function getRule(id) {
   })
 }
 
+// 查询源详细
+export function getRuleRaw(id) {
+  return request({
+    url: api_url + '/raw/' + id,
+    method: 'get'
+  })
+}
+
 // 修改
 export function setRecord(id, data) {
   return request({

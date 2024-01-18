@@ -132,8 +132,18 @@
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="ID" align="center" prop="id" sortable="custom"
                        :sort-orders="['descending', 'ascending']"/>
+      <!--      <el-table-column label="源名称" align="center" prop="name" width="200" :show-overflow-tooltip="true"-->
+      <!--                       sortable="custom" :sort-orders="['descending', 'ascending']"/>-->
+
       <el-table-column label="源名称" align="center" prop="name" width="200" :show-overflow-tooltip="true"
-                       sortable="custom" :sort-orders="['descending', 'ascending']"/>
+                       sortable="custom" :sort-orders="['descending', 'ascending']">
+        <template slot-scope="scope">
+          <el-link type="primary" @click="()=>handleLink(scope.row)">
+            <span>{{ scope.row.name }}</span>
+          </el-link>
+        </template>
+      </el-table-column>
+
       <el-table-column label="源分组" align="center" prop="group" width="130" :show-overflow-tooltip="true"
                        :formatter="groupFormat"/>
       <el-table-column label="文件路径" align="center" prop="path" :show-overflow-tooltip="true" width="200"/>
@@ -197,10 +207,13 @@
           <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)">
             <el-button size="mini" type="text" icon="el-icon-d-arrow-right">更多</el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="handleRun" icon="el-icon-menu" v-hasRole="['admin','opts']"
+              <el-dropdown-item command="handleRaw" icon="el-icon-link" v-hasRole="['admin','opts']"
+              >直链
+              </el-dropdown-item>
+              <el-dropdown-item command="handleHome" icon="el-icon-menu" v-hasRole="['admin','opts']"
               >首页
               </el-dropdown-item>
-              <el-dropdown-item command="handleView" icon="el-icon-search" v-hasRole="['admin','opts']"
+              <el-dropdown-item command="handleSearch" icon="el-icon-search" v-hasRole="['admin','opts']"
               >搜索
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -309,7 +322,7 @@ import {
   changeActive,
   getRule,
   setRecord,
-  uploadRules
+  uploadRules, getRuleRaw
 } from "@/api/vod/rules";
 import {getDicts} from "@/api/system/dict/data";
 import {parseTime} from "@/utils";
@@ -453,6 +466,55 @@ export default {
       this.single = selection.length != 1
       this.multiple = !selection.length
       this.selectName = selection.map(item => item.user_name);
+    },
+    // 更多操作触发
+    handleCommand(command, row) {
+      switch (command) {
+        case "handleRaw":
+          this.handleRaw(row);
+          break;
+        case "handleHome":
+          this.handleHome(row);
+          break;
+        case "handleSearch":
+          this.handleSearch(row);
+          break;
+        default:
+          break;
+      }
+    },
+    handleRaw(row) {
+      getRuleRaw(row.id).then(response => {
+        let data = response.data;
+        if (data.url && data.url.startsWith('http')) {
+          open(data.url)
+        }
+      });
+    },
+    handleLink(row) {
+      let group = this.groupOptions.find(x => x.value === row.group).label;
+      let name = row.name + row.file_type;
+      let file_url = new URL(process.env.VUE_APP_BASE_API).origin + "/files/" + group + '/' + name;
+      open(file_url);
+    },
+    handleHome(row) {
+      let group = this.groupOptions.find(x => x.value === row.group).label;
+      if (group === 'hipy' && row.file_type === '.py') {
+        let home_url = new URL(process.env.VUE_APP_BASE_API).origin + "/api/v1/vod/" + row.name;
+        open(home_url);
+      } else {
+        this.$modal.msgError('只有hipy源允许访问首页');
+      }
+    },
+    handleSearch(row) {
+      let group = this.groupOptions.find(x => x.value === row.group).label;
+      if (group === 'hipy' && row.file_type === '.py') {
+        let home_url = new URL(process.env.VUE_APP_BASE_API).origin + "/api/v1/vod/" + row.name;
+        let search_url = home_url + '?ac=list&pg=1&wd=斗罗大陆'
+        open(search_url);
+      } else {
+        this.$modal.msgError('只有hipy源允许访问搜索页');
+      }
     },
     /** 排序触发事件 */
     handleSortChange(column, prop, order) {
