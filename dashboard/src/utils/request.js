@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+import {MessageBox, Message} from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+import {getToken} from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
@@ -43,11 +43,14 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    console.log(res);
+    // console.log(res);
 
     // 二进制数据则直接返回
-    if (response.request.responseType ===  'blob' || response.request.responseType ===  'arraybuffer') {
+    if (response.request.responseType === 'blob' || response.request.responseType === 'arraybuffer') {
       return response
+    }
+    if (response.request.responseType === 'text') {
+      return response.request.responseText;
     }
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 0) {

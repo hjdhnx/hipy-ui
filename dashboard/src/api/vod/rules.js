@@ -27,12 +27,30 @@ export function getRuleRaw(id) {
   })
 }
 
+// 查询源码
+export function getRawContent(url) {
+  return request({
+    url: url,
+    responseType: 'text',
+    method: 'get'
+  })
+}
+
 // 修改
 export function setRecord(id, data) {
   return request({
     url: api_url + '/' + id,
     method: 'put',
     data: data
+  })
+}
+
+// 修改
+export function saveRecordContent(id, content) {
+  return request({
+    url: api_url + '/raw/' + id,
+    method: 'put',
+    data: {content: content}
   })
 }
 

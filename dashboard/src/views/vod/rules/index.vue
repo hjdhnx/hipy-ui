@@ -141,6 +141,10 @@
           <el-link type="primary" @click="()=>handleLink(scope.row)">
             <span>{{ scope.row.name }}</span>
           </el-link>
+
+          <router-link :to="'/vod/rules_edit/' + scope.row.id" class="link-type">
+            <i class="el-icon-edit-outline"/>
+          </router-link>
         </template>
       </el-table-column>
 
