@@ -43,6 +43,7 @@ npm config delete registry
 npm install -g cnpm --registry=https://registry.npmmirror.com
 cnpm install [name]
 
+cnpm install raphael
 ```
 
 3. 开发环境配置
