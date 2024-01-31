@@ -392,6 +392,7 @@ export default {
         page_size: 10,
         name: undefined,
         group: 't4/spiders',
+        file_type: undefined,
         status: undefined
       },
       // 表单参数

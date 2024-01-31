@@ -22,7 +22,8 @@
         />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择菜单状态" clearable size="small" @change="handleQuery">
+        <el-select v-model="queryParams.status" placeholder="请选择菜单状态" clearable size="small"
+                   @change="handleQuery">
           <el-option
             :key="undefined"
             :label="'全部'"
@@ -101,14 +102,38 @@
     <el-table v-loading="loading" :data="list" @selection-change="handleSelectionChange">i
       <el-table-column type="selection" width="55" align="center"/>
       <el-table-column label="编号" align="center" prop="id" width="55"/>
-      <el-table-column label="参数名称" align="center" prop="name" :show-overflow-tooltip="true"/>
-      <el-table-column label="参数键" align="center" prop="key" :show-overflow-tooltip="true"/>
-      <el-table-column label="参数值" align="center" prop="value" :show-overflow-tooltip="true"/>
+      <el-table-column label="参数名称" align="center" prop="name" width="200" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <span v-if="scope.row.value_type==='file'">
+            <el-link type="primary" @click="()=>handleLink(scope.row)">
+              <span>{{ scope.row.name }}</span>
+            </el-link>
+
+            <el-link type="primary" @click="()=>handleEdit(scope.row)">
+              <i class="el-icon-edit-outline"/>
+            </el-link>
+          </span>
+          <span v-else-if="scope.row.value_type==='url'">
+            <el-link type="primary" :href="scope.row.value" target="_blank">
+              <span>{{ scope.row.name }}</span>
+            </el-link>
+          </span>
+          <span v-else>
+            {{ scope.row.name }}
+          </span>
+
+        </template>
+      </el-table-column>
+
+
+      <el-table-column label="参数键" align="center" prop="key" width="150" :show-overflow-tooltip="true"/>
+      <el-table-column label="参数值" align="center" prop="value" width="200" :show-overflow-tooltip="true"/>
       <el-table-column label="值类型" align="center" prop="value_type" :formatter="valueTypeFormat"
                        :show-overflow-tooltip="true"/>
       <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true"/>
       <el-table-column label="排序" align="center" prop="order_num" :show-overflow-tooltip="true" width="55"/>
-      <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" :show-overflow-tooltip="true"/>
+      <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat"
+                       :show-overflow-tooltip="true"/>
       <el-table-column label="创建时间" align="center" prop="created_ts">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.created_ts) }}</span>
@@ -202,6 +227,9 @@
 
 <script>
 import {getDicts} from '@/api/system/dict/data'
+import {
+  list,
+} from "@/api/vod/rules";
 
 
 import {
@@ -320,6 +348,36 @@ export default {
         dict_type: undefined
       }
       this.handleQuery()
+    },
+    handleLink(row) {
+      let file_url = new URL(process.env.VUE_APP_BASE_API).origin + "/files/" + row.value;
+      open(file_url);
+    },
+    handleEdit(row) {
+      let url = row.value;
+      let lastOf = url.lastIndexOf('/') // '/'所在的最后位置
+      let str = url.substr(lastOf + 1); //截取文件名称和后缀
+      let group_label = url.substr(0, lastOf); // 截取分组的标签
+      let name = str.substring(0, str.lastIndexOf(".")); // 获取不带后缀的文件名
+      let file_type = url.substring(url.lastIndexOf(".")); //获取带.的后缀名
+      // let file_type = url.substring(url.lastIndexOf(".")+1);
+      // console.log(group_label,name,file_type);
+      getDicts("vod_rule_group").then(response => {
+        let groupOptions = response.data.details;
+        let group_value = groupOptions.find(x => x.label === group_label).value;
+        list({
+          name: name,
+          group: group_value,
+          file_type: file_type,
+        }).then(response => {
+          let ret = response.data.results;
+          let total = response.data.total;
+          if (total > 0) {
+            this.$router.push('/vod/rules_edit/' + ret[0].id);
+          }
+        });
+      });
+
     },
     /** 新增按钮操作 */
     handleAdd() {
