@@ -97,6 +97,17 @@
         >清空数据
         </el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-link type="primary" :href="host+'/config/1'" target="_blank">
+          <i class="el-icon-orange"/>T3配置
+        </el-link>
+      </el-col>
+
+      <el-col :span="1.5">
+        <el-link type="primary" :href="host+'/config/0'" target="_blank">
+          <i class="el-icon-orange"/>T4配置
+        </el-link>
+      </el-col>
     </el-row>
 
     <el-table v-loading="loading" :data="list" @selection-change="handleSelectionChange">i
@@ -105,11 +116,11 @@
       <el-table-column label="参数名称" align="center" prop="name" width="200" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <span v-if="scope.row.value_type==='file'">
-            <el-link type="primary" @click="()=>handleLink(scope.row)">
+            <el-link type="primary" @click="()=>{handleLink(scope.row)}">
               <span>{{ scope.row.name }}</span>
             </el-link>
 
-            <el-link type="primary" @click="()=>handleEdit(scope.row)">
+            <el-link type="primary" @click="()=>{handleEdit(scope.row)}">
               <i class="el-icon-edit-outline"/>
             </el-link>
           </span>
@@ -266,6 +277,7 @@ export default {
       open: false,
       statusOptions: [],
       valueTypeOptions: [],
+      host:'',
       // 查询参数
       queryParams: {
         page: 1,
@@ -297,6 +309,7 @@ export default {
     getDicts("vod_configs_value_type").then(response => {
       this.valueTypeOptions = response.data.details;
     });
+    this.host = new URL(process.env.VUE_APP_BASE_API).origin;
   },
   methods: {
     /** 查询字典类型列表 */
