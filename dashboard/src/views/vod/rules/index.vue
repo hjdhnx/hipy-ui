@@ -263,9 +263,15 @@
     <el-dialog :title="title" :visible.sync="open" width="400px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-row>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item label="源状态" prop="status">
-              <el-input v-model="form.status" placeholder="请输入源状态"/>
+              <el-input-number v-model="form.status" placeholder="请输入源状态" controls-position="right" :min="0" style="width: 100%"/>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="24">
+            <el-form-item label="显示排序" prop="order_num">
+              <el-input-number v-model="form.order_num" controls-position="right" :min="0" style="width: 100%"/>
             </el-form-item>
           </el-col>
 
