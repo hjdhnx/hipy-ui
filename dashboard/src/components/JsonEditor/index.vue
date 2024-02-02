@@ -28,7 +28,9 @@ export default {
     value(value) {
       const editorValue = this.jsonEditor.getValue()
       if (value !== editorValue) {
-        value = JSON.stringify(JSON.parse(this.value), null, 2)
+        try {
+          value = JSON.stringify(JSON.parse(this.value||'{}'), null, 2)
+        }catch (e) {}
         this.jsonEditor.setValue(value)
       }
     },
@@ -47,7 +49,11 @@ export default {
       lint: true
     })
     this.jsonEditor.setSize('auto', (this.height || 300) + 'px'); //设置宽度,高度
-    this.jsonEditor.setValue(JSON.stringify(JSON.parse(this.value), null, 2))
+    let value = this.value;
+    try {
+      value = JSON.stringify(JSON.parse(this.value||'{}'), null, 2)
+    }catch (e) {}
+    this.jsonEditor.setValue(value)
     this.jsonEditor.on('change', cm => {
       this.$emit('changed', cm.getValue())
       this.$emit('input', cm.getValue())

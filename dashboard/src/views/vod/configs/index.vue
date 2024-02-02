@@ -420,7 +420,6 @@ export default {
       const id = row.id || this.ids
       getConfigsById(id).then(response => {
         this.form = response.data;
-        this.form.value_json = JSON.parse(this.form.value || '{}');
         this.open = true
         this.title = '修改参数'
       })
