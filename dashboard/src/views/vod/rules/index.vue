@@ -161,7 +161,8 @@
 
       <el-table-column label="源分组" align="center" prop="group" width="130" :show-overflow-tooltip="true"
                        :formatter="groupFormat"/>
-      <el-table-column label="文件路径" align="center" prop="path" :show-overflow-tooltip="true" width="200" v-if="fields.file_path"/>
+      <el-table-column label="文件路径" align="center" prop="path" :show-overflow-tooltip="true" width="200"
+                       v-if="fields.file_path"/>
       <el-table-column label="是否存在" align="center" prop="is_exist" width="100">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.is_exist" disabled></el-switch>
@@ -177,7 +178,8 @@
       <!--        </template>-->
       <!--      </el-table-column>-->
 
-      <el-table-column label="源状态" align="center" prop="status" width="130" :show-overflow-tooltip="true" v-if="fields.status"
+      <el-table-column label="源状态" align="center" prop="status" width="130" :show-overflow-tooltip="true"
+                       v-if="fields.status"
                        :formatter="statusFormat"/>
       <el-table-column label="可搜索" align="center" prop="searchable" width="60" v-if="fields.searchable">
         <template slot-scope="scope">
@@ -245,6 +247,12 @@
               <el-dropdown-item command="handleSearch" icon="el-icon-search" v-hasRole="['admin','opts']"
               >搜索
               </el-dropdown-item>
+              <el-dropdown-item command="handleSetTop" icon="el-icon-top" v-hasRole="['admin','opts']"
+              >置顶
+              </el-dropdown-item>
+              <el-dropdown-item command="handleSetBottom" icon="el-icon-bottom" v-hasRole="['admin','opts']"
+              >置底
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -265,7 +273,8 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="源状态" prop="status">
-              <el-input-number v-model="form.status" placeholder="请输入源状态" controls-position="right" :min="0" style="width: 100%"/>
+              <el-input-number v-model="form.status" placeholder="请输入源状态" controls-position="right" :min="0"
+                               style="width: 100%"/>
             </el-form-item>
           </el-col>
 
@@ -435,6 +444,7 @@ import {
   changeActive,
   getRule,
   setRecord,
+  setOrderNum,
   uploadRules, getRuleRaw
 } from "@/api/vod/rules";
 import {getDicts} from "@/api/system/dict/data";
@@ -496,17 +506,17 @@ export default {
         url: process.env.VUE_APP_BASE_API + "vods/rules/file/uploadData"
       },
       // 列表字段显示参数
-      fields:{
-        open:false,
-        title:'',
-        create_time:false,
-        update_time:false,
-        file_path:false,
-        ext:false,
-        status:false,
-        searchable:true,
-        filterable:true,
-        quickSearch:true,
+      fields: {
+        open: false,
+        title: '',
+        create_time: false,
+        update_time: false,
+        file_path: false,
+        ext: false,
+        status: false,
+        searchable: true,
+        filterable: true,
+        quickSearch: true,
       },
       // 查询参数
       queryParams: {
@@ -605,6 +615,16 @@ export default {
           break;
         case "handleSearch":
           this.handleSearch(row);
+          break;
+        case "handleSetTop":
+          setOrderNum(row.id, 0).then(() => {
+            this.getList();
+          });
+          break;
+        case "handleSetBottom":
+          setOrderNum(row.id, 9999).then(() => {
+            this.getList();
+          });
           break;
         default:
           break;

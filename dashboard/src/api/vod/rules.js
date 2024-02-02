@@ -45,6 +45,15 @@ export function setRecord(id, data) {
   })
 }
 
+// 修改排序
+export function setOrderNum(id, order_num) {
+  return request({
+    url: api_url + '/' + id + '/order_num',
+    method: 'put',
+    data: {order_num: order_num}
+  })
+}
+
 // 修改
 export function saveRecordContent(id, content) {
   return request({
