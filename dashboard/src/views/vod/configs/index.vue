@@ -195,7 +195,9 @@
           <el-input v-model="form.key" placeholder="请输入参数键"/>
         </el-form-item>
         <el-form-item label="参数值" prop="value">
-          <el-input v-model="form.value" placeholder="请输入常数值"/>
+          <el-input v-if="form.value_type!=='json'" v-model="form.value" placeholder="请输入常数值"/>
+          <json-editor v-if="form.value_type==='json'" :value="form.value" :auto_line="true"
+                       v-model="form.value"></json-editor>
         </el-form-item>
         <!--        <el-form-item label="值类型" prop="value_type">-->
         <!--          <el-input v-model="form.value_type" placeholder="请输入值类型"/>-->
@@ -238,6 +240,7 @@
 
 <script>
 import {getDicts} from '@/api/system/dict/data'
+import JsonEditor from '@/components/JsonEditor'
 import {
   list,
 } from "@/api/vod/rules";
@@ -257,6 +260,7 @@ import {
 
 export default {
   name: 'VodConfigs',
+  components: {JsonEditor,},
   data() {
     return {
       // 遮罩层
@@ -277,7 +281,7 @@ export default {
       open: false,
       statusOptions: [],
       valueTypeOptions: [],
-      host:'',
+      host: '',
       // 查询参数
       queryParams: {
         page: 1,
@@ -415,7 +419,8 @@ export default {
       this.reset()
       const id = row.id || this.ids
       getConfigsById(id).then(response => {
-        this.form = response.data
+        this.form = response.data;
+        this.form.value_json = JSON.parse(this.form.value || '{}');
         this.open = true
         this.title = '修改参数'
       })
