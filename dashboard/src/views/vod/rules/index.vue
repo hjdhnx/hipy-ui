@@ -125,6 +125,17 @@
         >导出
         </el-button>
       </el-col>
+
+      <el-col :span="1.5">
+        <el-button
+          type="default"
+          plain
+          icon="el-icon-setting"
+          size="mini"
+          @click="fields.open=true;fields.title='列表显示/隐藏字段设置'"
+        >字段设置
+        </el-button>
+      </el-col>
     </el-row>
 
     <el-table ref="tables" v-loading="loading" :data="list" @selection-change="handleSelectionChange"
@@ -150,16 +161,15 @@
 
       <el-table-column label="源分组" align="center" prop="group" width="130" :show-overflow-tooltip="true"
                        :formatter="groupFormat"/>
-      <el-table-column label="文件路径" align="center" prop="path" :show-overflow-tooltip="true" width="200"/>
+      <el-table-column label="文件路径" align="center" prop="path" :show-overflow-tooltip="true" width="200" v-if="fields.file_path"/>
       <el-table-column label="是否存在" align="center" prop="is_exist" width="100">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.is_exist" disabled></el-switch>
         </template>
       </el-table-column>
 
-      <el-table-column label="显示排序" align="center" prop="order_num"/>
       <el-table-column label="文件类型" align="center" prop="file_type"/>
-      <el-table-column label="排序" align="center" prop="order_num" sortable="custom"
+      <el-table-column label="显示排序" align="center" prop="order_num" sortable="custom"
                        :sort-orders="['descending', 'ascending']"/>
       <!--      <el-table-column label="源状态" align="center" prop="status">-->
       <!--        <template slot-scope="scope">-->
@@ -167,23 +177,38 @@
       <!--        </template>-->
       <!--      </el-table-column>-->
 
-      <el-table-column label="源状态" align="center" prop="status" width="130" :show-overflow-tooltip="true"
+      <el-table-column label="源状态" align="center" prop="status" width="130" :show-overflow-tooltip="true" v-if="fields.status"
                        :formatter="statusFormat"/>
-      <el-table-column label="ext扩展" align="center" prop="ext" :show-overflow-tooltip="true"/>
+      <el-table-column label="可搜索" align="center" prop="searchable" width="60" v-if="fields.searchable">
+        <template slot-scope="scope">
+          <el-switch :active-value="1" :inactive-value="0" v-model="scope.row.searchable" disabled></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="可筛选" align="center" prop="filterable" width="60" v-if="fields.filterable">
+        <template slot-scope="scope">
+          <el-switch :active-value="1" :inactive-value="0" v-model="scope.row.filterable" disabled></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="可快搜" align="center" prop="quickSearch" width="60" v-if="fields.quickSearch">
+        <template slot-scope="scope">
+          <el-switch :active-value="1" :inactive-value="0" v-model="scope.row.quickSearch" disabled></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="ext扩展" align="center" prop="ext" :show-overflow-tooltip="true" v-if="fields.ext"/>
       <el-table-column label="是否显示" align="center" prop="active" width="100">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.active" @change="handleChangIsActive(scope.row)"></el-switch>
         </template>
       </el-table-column>
 
-      <el-table-column label="创建时间" align="center" prop="created_ts" sortable="custom"
+      <el-table-column label="创建时间" align="center" prop="created_ts" sortable="custom" v-if="fields.create_time"
                        :sort-orders="['descending', 'ascending']" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.created_ts) }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="更新时间" align="center" prop="modified_ts" sortable="custom"
+      <el-table-column label="更新时间" align="center" prop="modified_ts" sortable="custom" v-if="fields.update_time"
                        :sort-orders="['descending', 'ascending']" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.modified_ts) }}</span>
@@ -235,7 +260,7 @@
     />
 
     <!-- 添加或修改源对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="400px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-row>
           <el-col :span="12">
@@ -247,6 +272,24 @@
           <el-col :span="12">
             <el-form-item label="是否显示" prop="active">
               <el-switch v-model="form.active"></el-switch>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="可搜索" prop="searchable">
+              <el-switch :active-value="1" :inactive-value="0" v-model="form.searchable"></el-switch>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="可筛选" prop="filterable">
+              <el-switch :active-value="1" :inactive-value="0" v-model="form.filterable"></el-switch>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="可快速搜索" prop="quickSearch">
+              <el-switch :active-value="1" :inactive-value="0" v-model="form.quickSearch"></el-switch>
             </el-form-item>
           </el-col>
 
@@ -262,6 +305,66 @@
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 显示隐藏字段对话框 -->
+    <el-dialog :title="fields.title" :visible.sync="fields.open" width="400px" append-to-body>
+      <el-form ref="fields" :model="fields" label-width="120px">
+        <el-row>
+
+          <el-col :span="12">
+            <el-form-item label="创建时间" prop="create_time">
+              <el-switch v-model="fields.create_time"></el-switch>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="修改时间" prop="update_time">
+              <el-switch v-model="fields.update_time"></el-switch>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="文件路径" prop="file_path">
+              <el-switch v-model="fields.file_path"></el-switch>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="ext扩展" prop="ext">
+              <el-switch v-model="fields.ext"></el-switch>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="源状态" prop="status">
+              <el-switch v-model="fields.status"></el-switch>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="可搜索" prop="searchable">
+              <el-switch v-model="fields.searchable"></el-switch>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="可筛选" prop="filterable">
+              <el-switch v-model="fields.filterable"></el-switch>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12">
+            <el-form-item label="快速搜索" prop="quickSearch">
+              <el-switch v-model="fields.quickSearch"></el-switch>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="fields.open=false">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -385,6 +488,19 @@ export default {
         headers: {Token: getToken(), 'Content-Type': 'multipart/form-data'},
         // 上传的地址
         url: process.env.VUE_APP_BASE_API + "vods/rules/file/uploadData"
+      },
+      // 列表字段显示参数
+      fields:{
+        open:false,
+        title:'',
+        create_time:false,
+        update_time:false,
+        file_path:false,
+        ext:false,
+        status:false,
+        searchable:true,
+        filterable:true,
+        quickSearch:true,
       },
       // 查询参数
       queryParams: {
