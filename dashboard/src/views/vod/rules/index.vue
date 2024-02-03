@@ -264,6 +264,7 @@
       :total="total"
       :page.sync="queryParams.page"
       :limit.sync="queryParams.page_size"
+      :page-sizes="[10,15,20,40,60,80,100,150,200,300,500,1000]"
       @pagination="getList"
     />
 
