@@ -1,5 +1,5 @@
 import Vue from 'vue'
-
+import VueClipboard from 'vue-clipboard2'
 import Cookies from 'js-cookie'
 
 import md5 from 'js-md5'
@@ -85,6 +85,7 @@ import button_permission from './directive/button_permission'
 
 Vue.use(button_permission)
 Vue.use(plugins)
+Vue.use(VueClipboard)
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size

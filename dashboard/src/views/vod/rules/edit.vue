@@ -5,9 +5,15 @@
         <el-col :span="18">
           <el-input v-model="form.rule_url" :disabled="false" type="textarea" :rows="1"/>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="6">
+<!--          <el-link type="primary" :href="form.rule_url" target="_blank">-->
+<!--            <span>访问</span>-->
+<!--          </el-link>-->
+          <el-button size="mini" icon="el-icon-d-arrow-right" @click="openUrl(form.rule_url)" type="primary">
+            访问
+          </el-button>
           <!--          <el-button type="primary" icon="el-icon-copy-document" circle @click="handleCopy">复制</el-button>-->
-          <el-button class="copy-btn-main" size="mini" icon="el-icon-document-copy" type="primary">
+          <el-button class="copy-btn-main" size="mini" icon="el-icon-document-copy" @click="handleCopy" type="success">
             复制
           </el-button>
         </el-col>
@@ -15,7 +21,8 @@
 
       <el-form-item label="主题" prop="theme">
         <el-col :span="12">
-          <el-select v-model="editor.theme" @change="handleThemeChange" placeholder="请选择编辑器皮肤" clearable size="small">
+          <el-select v-model="editor.theme" @change="handleThemeChange" placeholder="请选择编辑器皮肤" clearable
+                     size="small">
             <el-option
               v-for="dict in themeOptions"
               :key="dict.value"
@@ -127,26 +134,6 @@ export default {
     this.getList();
   },
   mounted() {
-    if (!this.clipboard) {
-      this.clipboard = new ClipboardJS('.copy-btn-main', {
-        text: trigger => {
-          const codeStr = this.form.rule_url;
-          // this.$notify({
-          //   title: '复制成功',
-          //   message: '链接地址已复制到剪切板,可粘贴。\n'+this.form.rule_url,
-          //   type: 'success'
-          // })
-          this.$message({
-            message: '已复制到剪切板\n' + codeStr,
-            type: 'success'
-          });
-          return codeStr
-        }
-      })
-      this.clipboard.on('error', e => {
-        this.$message.error('链接地址复制失败')
-      })
-    }
 
   },
   methods: {
@@ -168,14 +155,17 @@ export default {
             this.form.rule_editable = data.editable;
 
             if (data.editable) {
-              getRawContent(data.url).then(response => {
+              getRawContent(data.url + '?t=' + new Date().getTime()).then(response => {
                 this.form.rule_code = response;
+                this.loading = false
               });
             } else {
-              this.form.rule_code = '二进制文件无法显示文本内容'
+              this.form.rule_code = '二进制文件无法显示文本内容';
+              this.loading = false
             }
+          } else {
+            this.loading = false
           }
-          this.loading = false
         });
       }
     },
@@ -210,13 +200,6 @@ export default {
       this.queryParams.page = 1
       this.getList()
     },
-    handleCopy() {
-      // console.log(this.form.rule_url);
-      this.$message({
-        message: '已复制到剪切板\n' + this.form.rule_url,
-        type: 'success'
-      });
-    },
     /** 重置按钮操作 */
     resetQuery() {
       this.queryParams = {
@@ -225,6 +208,47 @@ export default {
       }
       this.handleQuery()
     },
+    openUrl(url){
+      open(url);
+    },
+    /** 复制按钮操作 */
+    handleCopy(){
+      this.$copyText(this.form.rule_url)
+        .then((e) => {
+          this.$message({
+            message: '已复制到剪切板\n' + e.text,
+            type: 'success'
+          });
+        })
+        .catch((e) => {
+          this.$message.error('链接地址复制失败');
+        });
+
+
+      // let self = this;
+      // let clipboard = new ClipboardJS('.copy-btn-main', {
+      //     text: trigger => {
+      //       const codeStr = self.form.rule_url;
+      //       // this.$notify({
+      //       //   title: '复制成功',
+      //       //   message: '链接地址已复制到剪切板,可粘贴。\n'+self.form.rule_url,
+      //       //   type: 'success'
+      //       // })
+      //       self.$message({
+      //         message: '已复制到剪切板\n' + codeStr,
+      //         type: 'success'
+      //       });
+      //       return codeStr
+      //     }
+      // });
+      // clipboard.on("success", (e) => {
+      //   clipboard.destroy();
+      // });
+      // clipboard.on('error', e => {
+      //   self.$message.error('链接地址复制失败');
+      //   clipboard.destroy();
+      // });
+    }
   }
 }
 </script>
