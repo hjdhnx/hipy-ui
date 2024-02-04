@@ -1,31 +1,32 @@
 <template>
   <div class="icons-container">
     <aside>
-      <a href="#" target="_blank">Add and use
+      <a href="#" target="_blank">PC端双击可复制
       </a>
     </aside>
     <el-tabs type="border-card">
       <el-tab-pane label="Icons">
-        <div v-for="item of svgIcons" :key="item">
+        <div v-for="item of svgIcons" :key="item" @dblclick.stop="()=>{$copyText(item);$message(`已复制${item}`)}">
           <el-tooltip placement="top">
             <div slot="content">
               {{ generateIconCode(item) }}
             </div>
             <div class="icon-item">
-              <svg-icon :icon-class="item" class-name="disabled" />
+              <svg-icon :icon-class="item" class-name="disabled"/>
               <span>{{ item }}</span>
             </div>
           </el-tooltip>
         </div>
       </el-tab-pane>
       <el-tab-pane label="Element-UI Icons">
-        <div v-for="item of elementIcons" :key="item">
+        <div v-for="item of elementIcons" :key="item"
+             @dblclick.stop="()=>{$copyText('el-icon-' + item);$message(`已复制 el-icon-${item}`)}">
           <el-tooltip placement="top">
             <div slot="content">
               {{ generateElementIconCode(item) }}
             </div>
             <div class="icon-item">
-              <i :class="'el-icon-' + item" />
+              <i :class="'el-icon-' + item"/>
               <span>{{ item }}</span>
             </div>
           </el-tooltip>
