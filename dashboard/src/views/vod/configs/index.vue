@@ -367,7 +367,7 @@ export default {
       this.handleQuery()
     },
     handleLink(row) {
-      let file_url = new URL(process.env.VUE_APP_BASE_API).origin + "/files/" + row.value;
+      let file_url = new URL(process.env.VUE_APP_BASE_API).origin + "/files/" + row.value+'?t='+new Date().getTime();
       open(file_url);
     },
     handleEdit(row) {

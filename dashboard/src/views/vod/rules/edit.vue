@@ -209,7 +209,7 @@ export default {
       this.handleQuery()
     },
     openUrl(url){
-      open(url);
+      open(url+'?t='+new Date().getTime());
     },
     /** 复制按钮操作 */
     handleCopy(){
