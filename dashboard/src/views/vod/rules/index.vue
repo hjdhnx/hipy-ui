@@ -486,7 +486,7 @@ export default {
       fileTypeOptions: [{label: 'py', value: '.py'}, {label: 'json', value: '.json'}, {
         label: 'js',
         value: '.js'
-      }, {label: 'txt', value: '.txt'}, {label: 'm3u', value: '.m3u'}],
+      }, {label: 'txt', value: '.txt'}, {label: 'm3u', value: '.m3u'},{label: 'jar', value: '.jar'},],
 
       // 上传源参数
       upload: {
