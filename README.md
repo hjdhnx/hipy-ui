@@ -63,6 +63,7 @@ cp .env.production.example .env.production  # 复制配置文件
 
 vim .env.production  # 编辑配置文件
 
+set NODE_OPTIONS=--openssl-legacy-provider
 npm run build:stage  # 打包项目文件 (可以考虑在本地打包后把dies文件上传服务器部署)
 ```
 
@@ -83,3 +84,7 @@ nginx -t   # 检查Nginx配置文件
 
 nginx -s reload   # 重启Nginx
 ```
+
+### 免费托管vue前端项目
+
+[这个平台](https://vercel.com/)
