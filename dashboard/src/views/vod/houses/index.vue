@@ -105,7 +105,7 @@
 
 <script>
 import {getDicts} from '@/api/system/dict/data'
-import {listHouses, refreshHouses} from "@/api/vod/houses";
+import {addHouses, listHouses, refreshHouses} from "@/api/vod/houses";
 
 export default {
   name: 'VodHouses',
@@ -214,7 +214,7 @@ export default {
       }).catch(() => {
       });
     },
-    /** 删除按钮操作 */
+    /** 导入按钮操作 */
     handleImport(row) {
       const ids = row.id || this.ids
       this.$confirm('是否确认安装编号为"' + ids + '"等' + (ids.length || 1) + '个源?', '警告', {
@@ -222,10 +222,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function () {
-        return delConfigs(ids)
-      }).then(() => {
+        return addHouses(ids)
+      }).then((resp) => {
         this.getList()
-        this.msgSuccess('删除成功')
+        this.msgSuccess(resp.data)
       }).catch(function () {
       })
     }

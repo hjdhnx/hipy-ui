@@ -12,6 +12,13 @@ export function listHouses(query) {
   })
 }
 
+// 从id导入源
+export function addHouses(id) {
+  return request({
+    url: api_url + "/" + id,
+    method: 'put'
+  })
+}
 
 // 刷新仓库源
 export function refreshHouses() {
