@@ -27,6 +27,7 @@ import './permission' // permission control
 import './utils/error-log' // error log
 import {getDicts} from '@/api/system/dict/data'
 import {resetForm, selectDictLabel, download, handleTree, parseTime, addDateRange} from '@/utils/ruoyi'
+import {getFormatTime} from '@/utils/index'
 // 分页组件
 import Pagination from "@/components/Pagination";
 // 自定义表格工具组件
@@ -53,6 +54,7 @@ Vue.prototype.resetForm = resetForm
 Vue.prototype.addDateRange = addDateRange
 Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.parseTime = parseTime
+Vue.prototype.getFormatTime = getFormatTime
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
 

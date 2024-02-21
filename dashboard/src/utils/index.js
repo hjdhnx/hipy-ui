@@ -45,7 +45,9 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') {
+      return ['日', '一', '二', '三', '四', '五', '六'][value]
+    }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -254,7 +256,7 @@ export function getTime(type) {
 export function debounce(func, wait, immediate) {
   let timeout, args, context, timestamp, result
 
-  const later = function() {
+  const later = function () {
     // 据上一次触发时间间隔
     const last = +new Date() - timestamp
 
@@ -271,7 +273,7 @@ export function debounce(func, wait, immediate) {
     }
   }
 
-  return function(...args) {
+  return function (...args) {
     context = this
     timestamp = +new Date()
     const callNow = immediate && !timeout
@@ -422,4 +424,33 @@ export function camelCase(str) {
 
 export function isNumberStr(str) {
   return /^[+-]?(0|([1-9]\d*))(\.\d+)?$/g.test(str)
+}
+
+export function getFormatTime(dateTime, flag) {
+  if (dateTime != null) {
+    //若传入的dateTime为字符串类型，需要进行转换成数值，若不是无需下面注释代码
+    var time = parseInt(String(dateTime * 1000))
+    var date = new Date(time);
+    //获取年份
+    var YY = date.getFullYear();
+    //获取月份
+    var MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+    //获取日期
+    var DD = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
+    if (flag) { //flag为true，显示时分秒格式
+      //获取小时
+      var hh = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours());
+      //获取分
+      var mm = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
+      ///获取秒
+      var ss = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+      //返回时间格式： 2020-11-09 13:14:52
+      return YY + '-' + MM + '-' + DD + ' ' + hh + ':' + mm + ':' + ss;
+    } else {
+      //返回时间格式： 2020-11-09
+      return YY + '-' + MM + '-' + DD;
+    }
+  } else {
+    return "";
+  }
 }
