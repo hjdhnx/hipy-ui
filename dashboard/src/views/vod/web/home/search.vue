@@ -1,9 +1,9 @@
 <template>
   <div class="layout-content">
 
-    <h3>与"{{keyword}}"相关视频：</h3>
+    <h3>与"{{ keyword }}"相关视频：</h3>
     <div class="lvideo-list">
-       <a class="video-item" :href="handleDetail(item.vod_id)" v-for="item in tData.vodData">
+      <a class="video-item" :href="handleDetail(item.vod_id)" v-for="item in tData.vodData">
         <div class="cover-wrap">
           <img :src="item.vod_pic"/>
           <span class="remarks">{{ item.vod_remarks }}</span>
@@ -30,41 +30,46 @@ import {
 export default {
   name: 'VodWebSearch',
   components: {},
-  data(){
+  data() {
     return {
-      page:1,
-      num_pages:0,
-      tData:{
+      page: 1,
+      num_pages: 0,
+      tData: {
         vodData: []
       },
-      keyword:'',
+      keyword: '',
     }
   },
   created() {
     this.keyword = this.$route.query.keyword;
-    SearchApi(this.keyword).then((resp)=>{
+    this.pg = Number(this.$route.query.pg || 1);
+    SearchApi(this.keyword, this.pg).then((resp) => {
       this.tData.vodData = resp.list
     })
   },
-  watch:{
-    '$route.query.keyword': function(){
-      this.keyword=this.$route.query.keyword
+  watch: {
+    '$route.query.keyword': function () {
+      this.keyword = this.$route.query.keyword
     },
-    $route(){
-      this.keyword= this.$route.query.keyword
+    '$route.query.pg': function () {
+      this.pg = Number(this.$route.query.pg || 1);
+    },
+    $route() {
+      this.keyword = this.$route.query.keyword
+      this.pg = Number(this.$route.query.pg || 1);
     },
   },
-  methods:{
-    handleDetail(vod_id){
+  methods: {
+    handleDetail(vod_id) {
       return '/detail/' + vod_id
     },
-    handlePre(){
+    handlePre() {
       if (this.page > 1) {
         this.page -= 1
         this.getData()
       }
     },
-    handleNext(){
+    handleNext() {
       if (this.page < this.num_pages) {
         this.page += 1
         this.getData()
