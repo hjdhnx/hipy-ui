@@ -54,11 +54,12 @@ export function CateGoryApi(t, pg, filters) {
   pg = pg || 1;
   filters = filters || ''
   return request({
-    url: api_url + '&ac=list&filter=true',
+    url: api_url + '&ac=list',
     responseType: 'json',
     method: 'get',
     params: {
       extend: extend,
+      filter: true,
       t: t,
       pg: pg,
       ext: filters
