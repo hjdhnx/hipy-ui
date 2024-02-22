@@ -20,7 +20,7 @@ export default {
     return {
       currentMenu: '',
       menuData: [
-        {label: '首页', id: 'index'},
+        {label: '首页', id: 'index'},//这里获取分类，默认添加主页，其他类型追加到后面
         {label: '电影', id: 'dianying'},
         {label: '电视剧', id: 'dianshiju'},
         {label: '综艺', id: 'zongyi'},

@@ -1,48 +1,10 @@
 <template>
   <div class="layout-content">
 
-    <div class="category-layout">
-      <div class="category__line">
-        <li class="category__first-ele">类型</li>
-        <ul class="category__list category__sub">
-          <li class="category__list__item category__sub__item" :class="currentClass===item? 'active':''"
-              @click="handleClickClass(item)"
-              v-for="item in categoryData.vodClassData">{{ item }}
-          </li>
-        </ul>
-      </div>
-      <div class="category__line">
-        <li class="category__first-ele">地区</li>
-        <ul class="category__list category__sub">
-          <li class="category__list__item category__sub__item" :class="currentArea===item? 'active':''"
-              @click="handleClickArea(item)"
-              v-for="item in categoryData.vodAreaData">{{ item }}
-          </li>
-        </ul>
-      </div>
-      <div class="category__line">
-        <li class="category__first-ele">年份</li>
-        <ul class="category__list category__sub">
-          <li class="category__list__item category__sub__item" :class="currentYear===item? 'active':''"
-              @click="handleClickYear(item)"
-              v-for="item in categoryData.vodYearData">{{ item }}
-          </li>
-        </ul>
-      </div>
-    </div>
-
+  <Filter :data="filterData"/>
 
     <div class="lvideo-list">
-      <a class="video-item" :href="handleDetail(item.vod_id)" v-for="item in tData.vodData">
-        <div class="cover-wrap">
-          <img :src="item.vod_pic"/>
-          <span class="remarks">{{ item.vod_remarks }}</span>
-        </div>
-        <div class="meta-wrap">
-          <div class="title">{{ item.vod_name }}</div>
-          <div class="info">{{ getFormatTime(item.vod_time, false) }}更新</div>
-        </div>
-      </a>
+       <VideoItem :vodDatas="vodDatas"/>
     </div>
 
     <div class="page-wrap" v-if="num_pages > 1">
@@ -52,21 +14,18 @@
   </div>
 
 </template>
+
 <script>
-const vodClassData = ['全部', '动作', '爱情', '喜剧', '科幻', '恐怖', '剧情',]
-const vodAreaData = [
-  '全部', '大陆', '香港', '台湾','加拿大','印度','土耳其','墨西哥','巴西','日本','韩国','西班牙','英国','美国','泰国','法国',
-]
-const vodYearData = ['全部']
-for (let i = 2023; i > 2004; i--) {
-  vodYearData.push(i)
-}
+
+import Filter from '@/views/vod/web/components/filter.vue'
+import VideoItem from '@/views/vod/web/components/videoItem.vue'
 
 export default {
-  name: 'VodWebCate2',
-  components: {},
+  name: 'VodWebCate1',
+  components: {Filter,VideoItem},
   data(){
     return {
+      filterData:[],//分类数据
       currentClass:'全部',
       currentArea:'全部',
       currentYear:'全部',
@@ -78,9 +37,7 @@ export default {
         vodAreaData,
         vodYearData
       },
-      tData:{
-        vodData: []
-      }
+      vodDatas:[]
     }
   },
   created() {
@@ -121,7 +78,7 @@ export default {
       filterDict['page'] = this.page
       // listApi(filterDict).then(res => {
       //   console.log(res.data)
-      //   tData.vodData = res.data
+      //   vodDatas= res.data
       //   // 分页
       //   page.value = res.page
       //   num_pages.value = res.num_pages
@@ -220,8 +177,6 @@ export default {
       }
     }
   }
-
-
   .lvideo-list {
     min-height: 200px;
     margin-top: 12px;
@@ -243,8 +198,7 @@ export default {
           border-radius: 4px;
           overflow: hidden;
           // todo 修改默认图
-          //background: url(../load.gif) no-repeat;
-          // background-color: #e6f2f5;
+          background-color: #e6f2f5;
           width: 100%;
           height: 100%;
           background-size: cover;
