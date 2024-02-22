@@ -25,6 +25,7 @@ export default {
   components: {Filter,VideoItem},
   data(){
     return {
+      categoryId :'',
       filterData:[],//分类数据
       currentClass:'全部',
       currentArea:'全部',
@@ -41,6 +42,7 @@ export default {
     }
   },
   created() {
+    this.categoryId = this.$route.params.id;//路由设置参数，从路径中获取参数
     this.page = 1
     this.getData()
   },
