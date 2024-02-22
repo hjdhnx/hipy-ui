@@ -52,6 +52,9 @@ service.interceptors.response.use(
     if (response.request.responseType === 'text') {
       return response.request.responseText;
     }
+    if (response.request.responseType === 'json') {
+      return res;
+    }
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 0) {
       Message({

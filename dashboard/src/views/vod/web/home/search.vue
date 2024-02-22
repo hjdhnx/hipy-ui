@@ -23,6 +23,10 @@
 
 </template>
 <script>
+import {
+  SearchApi
+} from "@/api/vod/web";
+
 export default {
   name: 'VodWebSearch',
   components: {},
@@ -37,6 +41,10 @@ export default {
     }
   },
   created() {
+    this.keyword = this.$route.query.keyword;
+    SearchApi(this.keyword).then((resp)=>{
+      this.tData.vodData = resp.list
+    })
   },
   watch:{
     '$route.query.keyword': function(){
