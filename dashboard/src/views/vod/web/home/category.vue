@@ -20,6 +20,13 @@
 import Filter from '@/views/vod/web/components/filter.vue'
 import VideoItem from '@/views/vod/web/components/videoItem.vue'
 
+const vodClassData = ['全部', '国产', '日剧', '韩剧', '欧美', '港澳', '泰剧', '台剧']
+const vodAreaData = ['全部', '大陆', '香港', '台湾','加拿大','印度','土耳其','墨西哥','巴西','日本','韩国','西班牙','英国','美国','泰国','法国']
+const vodYearData = ['全部']
+for (let i = 2023; i > 2004; i--) {
+  vodYearData.push(i)
+}
+
 export default {
   name: 'VodWebCate1',
   components: {Filter,VideoItem},

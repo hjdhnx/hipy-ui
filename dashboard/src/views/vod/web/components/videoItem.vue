@@ -1,6 +1,6 @@
 <template>
-    
-<a class="video-item" :href="handleDetail(item.vod_id)" v-for="item in vodData">
+<div>
+  <a class="video-item" :href="handleDetail(item.vod_id)" v-for="item in vodDatas">
     <div class="cover-wrap">
       <img :src="item.vod_pic"/>
       <span class="remarks">{{ item.vod_remarks }}</span>
@@ -10,7 +10,7 @@
       <div class="info">{{ getFormatTime(item.vod_time, false) }}更新</div>
     </div>
   </a>
-
+</div>
 </template>
 
 <script>
@@ -24,9 +24,7 @@ export default {
   methods: {
     handleDetail(vod_id){
       return '/detail/' + vod_id
-    },getFormatTime(time,aaa){//处理时间格式
-
-    }
+    },
   },
 }
 </script>
@@ -80,5 +78,5 @@ export default {
     }
 
   }
-  
+
   </style>

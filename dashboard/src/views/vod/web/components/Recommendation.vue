@@ -1,21 +1,24 @@
 <template>
-    
-<div class="header">
-    <h3>最新{{category }}</h3>
-    <a class="more" :href="'/category/' + categoryId">更多</a>
+
+  <div>
+    <div class="header">
+      <h3>最新{{category }}</h3>
+      <a class="more" :href="'/category/' + categoryId">更多</a>
+    </div>
+
+    <div class="lvideo-list">
+      <VideoItem :vodDatas="data"/>
+    </div>
   </div>
 
-  <div class="lvideo-list">
-    <videoItem :vodDatas="data"/>
-  </div>
 
 </template>
 
 
 <script>
-import videoItem from '@/views/vod/web/components/videoItem.vue'
+import VideoItem from '@/views/vod/web/components/videoItem.vue'
 export default {
-  components: {videoItem},
+  components: {VideoItem},
   props: {
     category: {
       type: String,
@@ -33,15 +36,13 @@ export default {
   methods: {
     handleDetail(vod_id){
       return '/detail/' + vod_id
-    },getFormatTime(time,aaa){//处理时间格式
-
-    }
+    },
   },
 }
 
 </script>
 
-  
+
 <style rel="stylesheet/scss" lang="scss">
 
 @media screen and (min-width: 1px) and (max-width: 768px) {

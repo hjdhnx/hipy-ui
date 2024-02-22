@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="portal">
-      <Header />
-      <Menu />
+      <Header/>
+      <Menu/>
       <router-view/>
     </div>
-    <Footer />
+    <Footer/>
   </div>
 </template>
 
@@ -13,21 +13,16 @@
 import Header from '@/views/vod/web/components/header.vue'
 import Footer from '@/views/vod/web/components/footer.vue'
 import Menu from '@/views/vod/web/components/menu.vue'
-import Category from '@/views/vod/web/components/category.vue'
 
 export default {
   name: 'VodWeb',
-  components: {Header,Footer,Menu,Category},
-  data(){
-    return {
-
-    }
+  components: {Header, Footer, Menu},
+  data() {
+    return {}
   },
   created() {
   },
-  methods:{
-
-  },
+  methods: {},
 }
 
 
@@ -45,7 +40,7 @@ export default {
 }
 
 body {
-  font-family: -apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Helvetica Neue,PingFang SC,Helvetica,Microsoft Yahei,Arial,sans-serif;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica Neue, PingFang SC, Helvetica, Microsoft Yahei, Arial, sans-serif;
 }
 
 </style>

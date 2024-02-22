@@ -32,7 +32,6 @@ export default {
   name: 'VodWebIndex',
   components: {Recommendation},
   data() {
-    
     return {
       recommendations: [//-----[data中的数据就是推荐视频列表数据]对接好接口，清空此数组-----
         { category: "电影", categoryId: "1",data: [
