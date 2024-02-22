@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 
 const api_url = 'https://www.smarth.fun:8123/api/v1/vod/cntv%E5%A4%AE%E8%A7%86?pwd=dzyyds'
+const extend = 'https://www.smarth.fun:8123/files/hipy/cntv央视.json'
 
 /**
  * 主页接口,返回首页推荐列表及分类数据
@@ -13,7 +14,7 @@ export function HomeApi() {
     responseType: 'json',
     method: 'get',
     params: {
-      extend: 'https://www.smarth.fun:8123/files/hipy/cntv央视.json',
+      extend: extend,
       filter: true,
     }
   })
@@ -33,6 +34,7 @@ export function SearchApi(wd, pg) {
     responseType: 'json',
     method: 'get',
     params: {
+      extend: extend,
       wd: wd,
       pg: pg
     }
@@ -56,6 +58,7 @@ export function CateGoryApi(t, pg, filters) {
     responseType: 'json',
     method: 'get',
     params: {
+      extend: extend,
       t: t,
       pg: pg,
       ext: filters
@@ -76,6 +79,7 @@ export function DetailApi(ids) {
     responseType: 'json',
     method: 'get',
     params: {
+      extend: extend,
       ids: ids,
     }
   })
@@ -96,6 +100,7 @@ export function PlayApi(play, flag) {
     responseType: 'json',
     method: 'get',
     params: {
+      extend: extend,
       play: play,
       flag: flag,
     }
