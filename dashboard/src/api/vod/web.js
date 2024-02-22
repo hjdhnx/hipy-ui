@@ -12,6 +12,10 @@ export function HomeApi() {
     url: api_url,
     responseType: 'json',
     method: 'get',
+    params: {
+      extend: 'https://www.smarth.fun:8123/files/hipy/cntv央视.json',
+      filter: true,
+    }
   })
 }
 
