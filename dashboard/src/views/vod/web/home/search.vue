@@ -3,7 +3,8 @@
 
     <h3>与"{{ keyword }}"相关视频：</h3>
     <div class="lvideo-list">
-      <a class="video-item" :href="handleDetail(item.vod_id)" v-for="item in tData.vodData">
+       <VideoItem :vodDatas="tData.vodData"/>
+      <!-- <a class="video-item" :href="handleDetail(item.vod_id)" v-for="item in tData.vodData">
         <div class="cover-wrap">
           <img :src="item.vod_pic"/>
           <span class="remarks">{{ item.vod_remarks }}</span>
@@ -12,7 +13,7 @@
           <div class="title">{{ item.vod_name }}</div>
           <div class="info">{{ getFormatTime(item.vod_time, false) }}更新</div>
         </div>
-      </a>
+      </a> -->
     </div>
 
     <div class="page-wrap" v-if="num_pages > 1">
