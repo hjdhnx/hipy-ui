@@ -87,7 +87,7 @@ export default {
       this.getData()
     },
     handleDetail(vod_id){
-      return '/detail/' + vod_id
+      this.$emit('filterSelected', vod_id);
     },
     getData() {
       const filterDict = {}

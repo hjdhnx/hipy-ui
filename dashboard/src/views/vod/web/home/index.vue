@@ -1,8 +1,8 @@
 <template>
 
-  <div>
+	<div>
 
-    <!-- <div class="header">
+		<!-- <div class="header">
       <h3>最新电影</h3>
       <a class="more" href="/dianying">更多</a>
     </div>
@@ -20,49 +20,51 @@
       </a>
     </div> -->
 
-    <Recommendation v-for="(categoryData, index) in recommendations" :key="index" :category="categoryData.category" :categoryId="categoryData.categoryId" :data="categoryData.data" />
+		<div class="lvideo-list">
+			<VideoItem :vodDatas="recommendations" />
+		</div>
 
-  </div>
+	</div>
 </template>
 
 <script>
-import Recommendation from '@/views/vod/web/components/Recommendation.vue'
+import VideoItem from '@/views/vod/web/components/videoItem.vue'
+	export default {
+		name: 'VodWebIndex',
+		components: {VideoItem},
+		data() {
+			return {
+				recommendations: [{
+					"vod_name": "测试",
+					"vod_id": "index.html",
+					"vod_pic": "https://gitee.com/CherishRx/imagewarehouse/raw/master/image/13096725fe56ce9cf643a0e4cd0c159c.gif",
+					"vod_remarks": "原始hipy"
+				}]
+			};
 
-export default {
-  name: 'VodWebIndex',
-  components: {Recommendation},
-  data() {
-    return {
-      recommendations: [//-----[data中的数据就是推荐视频列表数据]对接好接口，清空此数组-----
-        { category: "电影", categoryId: "1",data: [
-          { title: "电影1" },
-          { title: "电影2" },
-          { title: "电影3" }
-        ]},
-        { category: "电视剧",categoryId: "2", data: [
-          { title: "电视剧1" },
-          { title: "电视剧2" },
-          { title: "电视剧3" }
-        ]}
-        // 可以添加更多不同分类的数据
-      ]
-    };
-
-  },
-  created() {
-    this.getData()
-  },
-  methods: {
-    getData() {
-      //--【这里调用接口获取推荐列表数据，推荐列表中包含类型名称，类型id，类型下数据集合】 --
-      // homeApi({}).then(res => {
-      //   console.log(res.data)
-      //   this.recommendations = res.data;
-      // }).catch(err => {
-      //   console.log(err)
-      // })
-    }
-  }
-}
-
+		},
+		created() {
+			this.getData()
+		},
+		methods: {
+			getData() {
+				//this.recommendations = this.$store.vod.recommend ;
+			}
+		}
+	}
 </script>
+
+
+<style rel="stylesheet/scss" lang="scss">
+
+.lvideo-list {
+    min-height: 200px;
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+
+   
+  
+}
+</style>

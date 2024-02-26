@@ -33,9 +33,10 @@ export default {
     getData() {
       HomeApi().then((resp) => {
         this.category = resp.class;
-        // console.log(this.$store.vod);
-        // this.$store.vod.filters = resp.filters;
-        // this.$store.vod.recommend = resp.list;
+        this.$store.vod.SET_Filters(resp.filters);
+        this.$store.vod.SET_Recommend(resp.list);
+
+        console.log(this.$store.vod.filters);
       })
     }
 

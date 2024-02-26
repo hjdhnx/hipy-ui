@@ -31,52 +31,50 @@ export default {
 
 
 <style rel="stylesheet/scss" lang="scss">
-
 .video-item {
-    width: calc((100% - 3 * 16px) / 4);
-    aspect-ratio: 3/5;
-    min-height: 120px;
+  width: calc((100% - 3 * 16px) / 4);
+  aspect-ratio: 3/5;
+  min-height: 120px;
 
-    .cover-wrap {
-      position: relative;
+  .cover-wrap {
+    position: relative;
+    width: 100%;
+    height: 85%;
+
+    img {
+      border-radius: 4px;
+      overflow: hidden;
+      // todo 修改默认图
+      background-color: #e6f2f5;
       width: 100%;
-      height: 85%;
-
-      img {
-        border-radius: 4px;
-        overflow: hidden;
-        // todo 修改默认图
-        //background: url(../load.gif) no-repeat;
-        // background-color: #e6f2f5;
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        object-fit: cover;
-      }
-
-      .remarks {
-        position: absolute;
-        right: 4px;
-        bottom: 1px;
-        color: #fff;
-        font-size: 12px;
-      }
+      height: 100%;
+      background-size: cover;
+      object-fit: cover;
     }
 
-    .meta-wrap {
-      .title {
-        text-align: center;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-      }
+    .remarks {
+      position: absolute;
+      right: 4px;
+      bottom: 1px;
+      color: #fff;
+      font-size: 12px;
+    }
+  }
 
-      .info {
-        display: none;
-      }
+  .meta-wrap {
+    .title {
+      text-align: center;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
 
+    .info {
+      display: none;
     }
 
   }
+
+}
 
   </style>

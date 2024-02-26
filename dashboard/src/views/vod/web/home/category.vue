@@ -1,107 +1,67 @@
 <template>
   <div class="layout-content">
 
-  <Filter :data="filterData"/>
+    <Filters :data="filterData" @filterSelected="handleFilterSelection" />
 
     <div class="lvideo-list">
-       <VideoItem :vodDatas="vodDatas"/>
+      <VideoItem :vodDatas="vodDatas" />
     </div>
 
     <div class="page-wrap" v-if="num_pages > 1">
-      <div class="page-item" :class="page === 1? 'disable':''" @click="handlePre()">上页</div>
-      <div class="page-item" :class="page === num_pages? 'disable':''" @click="handleNext()">下页</div>
+      <div class="page-item" :class="page === 1 ? 'disable' : ''" @click="handlePre()">上页</div>
+      <div class="page-item" :class="page === num_pages ? 'disable' : ''" @click="handleNext()">下页</div>
     </div>
-  </div>
 
+  </div>
 </template>
 
 <script>
-
-import Filter from '@/views/vod/web/components/filter.vue'
+import Filters from '@/views/vod/web/components/filter.vue'
 import VideoItem from '@/views/vod/web/components/videoItem.vue'
-
-const vodClassData = ['全部', '国产', '日剧', '韩剧', '欧美', '港澳', '泰剧', '台剧']
-const vodAreaData = ['全部', '大陆', '香港', '台湾','加拿大','印度','土耳其','墨西哥','巴西','日本','韩国','西班牙','英国','美国','泰国','法国']
-const vodYearData = ['全部']
-for (let i = 2023; i > 2004; i--) {
-  vodYearData.push(i)
-}
+import {CateGoryApi} from "@/api/vod/web";
 
 export default {
-  name: 'VodWebCate1',
-  components: {Filter,VideoItem},
-  data(){
+  name: 'VodCategory',
+  components: { Filters, VideoItem },
+  data() {
     return {
-      categoryId :'',
-      filterData:[],//分类数据
-      currentClass:'全部',
-      currentArea:'全部',
-      currentYear:'全部',
-      page:1,
-      num_pages:0,
+      categoryId: '',
+      filterData: [],//分类数据
+      page: 1,
+      num_pages: 0,
 
-      categoryData:{
-        vodClassData,
-        vodAreaData,
-        vodYearData
-      },
-      vodDatas:[]
+      vodDatas: [],
+      currentClass:[]//选中的筛选集合
     }
   },
   created() {
-    this.categoryId = this.$route.params.id;//路由设置参数，从路径中获取参数
+    //this.filterData = this.$store.vod.filters;
+    //this.categoryId = this.$route.params.vid;//路由设置参数，从路径中获取参数
+
     this.page = 1
-    this.getData()
+    //this.getData()
   },
-  methods:{
-    handleClickClass(item){
+  methods: {
+    handleFilterSelection(item) {
       this.currentClass = item
       this.page = 1
       this.getData()
     },
-    handleClickArea(item){
-      this.currentArea = item
-      this.page = 1
-      this.getData()
-    },
-    handleClickYear(item){
-      this.currentYear = item
-      this.page = 1
-      this.getData()
-    },
-    handleDetail(vod_id){
-      return '/detail/' + vod_id
-    },
     getData() {
-      const filterDict = {}
-      filterDict['vod_type'] = 2
-      if (this.currentClass !== '全部') {
-        filterDict['vod_class'] = this.currentClass
-      }
-      if (this.currentArea !== '全部') {
-        filterDict['vod_area'] = this.currentArea
-      }
-      if (this.currentYear !== '全部') {
-        filterDict['vod_year'] = this.currentYear
-      }
-      filterDict['page'] = this.page
-      // listApi(filterDict).then(res => {
-      //   console.log(res.data)
-      //   vodDatas= res.data
-      //   // 分页
-      //   page.value = res.page
-      //   num_pages.value = res.num_pages
-      // }).catch(err => {
-      //   console.log(err)
-      // })
+
+      CateGoryApi(this.categoryId,this.page,this.currentClass).then((resp) => {
+        console.log(resp)
+        //this.vodDatas = resp.list;
+        //this.num_pages=resp.count;
+      })
     },
-    handlePre(){
+    handlePre() {
       if (this.page > 1) {
         this.page -= 1
         this.getData()
       }
     },
-    handleNext(){
+    handleNext() {
       if (this.page < this.num_pages) {
         this.page += 1
         this.getData()
@@ -113,7 +73,6 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-
 @media screen and (min-width: 1px) and (max-width: 768px) {
   .video-item {
     width: calc((100% - 2 * 16px) / 3) !important;
@@ -186,6 +145,7 @@ export default {
       }
     }
   }
+
   .lvideo-list {
     min-height: 200px;
     margin-top: 12px;
@@ -245,8 +205,10 @@ export default {
     display: flex;
     flex-direction: row;
     gap: 16px;
-    justify-content: center; /* 水平居中 */
-    align-items: center; /* 垂直居中 */
+    justify-content: center;
+    /* 水平居中 */
+    align-items: center;
+    /* 垂直居中 */
 
     .page-item {
       user-select: none;

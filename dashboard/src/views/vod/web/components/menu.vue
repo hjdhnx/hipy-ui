@@ -9,7 +9,6 @@
 	</div>
 </template>
 
-
 <script>
 	export default {
 		name: 'VodWebMenu',
@@ -33,16 +32,16 @@
 			this.handleNav('index');
 		},
 		methods: {
-			handleNav(vid) {
+			handleNav(vid) {//这里跳转有问题，首页到分类会出现刷新
 				this.currentMenu = vid;
 				if (vid == "index") {
-					// this.$router.push({
-					// 	path: 'web/index'
-					// });
+					this.$router.push({
+						name: 'VodWebIndex'
+					});
 				} else {
 					this.$router.push({
-						path: '/vod/web/home/category',
-						query: vid
+						name: 'VodCategory',
+						query: {'vid':vid}
 					});
 				}
 			}

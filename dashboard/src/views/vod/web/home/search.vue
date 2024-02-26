@@ -28,9 +28,10 @@ import {
   SearchApi
 } from "@/api/vod/web";
 
+import VideoItem from '@/views/vod/web/components/videoItem.vue'
 export default {
   name: 'VodWebSearch',
-  components: {},
+  components: {VideoItem},
   data() {
     return {
       page: 1,
