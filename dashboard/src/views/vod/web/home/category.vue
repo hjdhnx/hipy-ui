@@ -1,7 +1,7 @@
 <template>
   <div class="layout-content">
 
-    <Filters :data="filterData" @filterSelected="handleFilterSelection" />
+    <Filters :data="filterData" @filterSelected="handleFilterSelection" v-if="filterData"/>
 
     <div class="lvideo-list">
       <VideoItem :vodDatas="vodDatas" />
@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       categoryId: '',
-      filterData: [],//分类数据
+      filterData: null,//分类数据
       page: 1,
       num_pages: 0,
 
@@ -34,7 +34,7 @@ export default {
       currentClass:[]//选中的筛选集合
     }
   },
-  created() { 
+  created() {
     this.categoryId = this.$route.query.t;//路由设置参数，从路径中获取参数
     console.log('this.categoryId:',this.categoryId)
     //this.filterData = this.$store.vod.filters;
@@ -42,7 +42,7 @@ export default {
 
     this.page = 1
     //this.getData()
-  }, 
+  },
   watch: {
     '$route.query.t': function () {
       this.categoryId = this.$route.query.t
@@ -58,11 +58,11 @@ export default {
     },
     getData() {
       this.filterData = this.categoryId?this.$store.state.vod.filters[this.categoryId]:null
-      console.log(this.filterData)
+      console.log('this.filterData:',this.filterData)
       CateGoryApi(this.categoryId,this.page,this.currentClass).then((resp) => {
         console.log(resp)
-        //this.vodDatas = resp.list;
-        //this.num_pages=resp.count;
+        // this.vodDatas = resp.list;
+        // this.num_pages=resp.count;
       })
     },
     handlePre() {

@@ -1,33 +1,43 @@
 <template>
 
   <div class="category-layout">
-      <div class="category__line">
-        <li class="category__first-ele">类型</li>
-        <ul class="category__list category__sub">
-          <li class="category__list__item category__sub__item" :class="currentClass===item? 'active':''"
-              @click="handleClickClass(item)"
-              v-for="item in categoryData.vodClassData">{{ item }}
-          </li>
-        </ul>
-      </div>
-      <div class="category__line">
-        <li class="category__first-ele">地区</li>
-        <ul class="category__list category__sub">
-          <li class="category__list__item category__sub__item" :class="currentArea===item? 'active':''"
-              @click="handleClickArea(item)"
-              v-for="item in categoryData.vodAreaData">{{ item }}
-          </li>
-        </ul>
-      </div>
-      <div class="category__line">
-        <li class="category__first-ele">年份</li>
-        <ul class="category__list category__sub">
-          <li class="category__list__item category__sub__item" :class="currentYear===item? 'active':''"
-              @click="handleClickYear(item)"
-              v-for="item in categoryData.vodYearData">{{ item }}
-          </li>
-        </ul>
-      </div>
+    <div class="category__line" v-for="class_item in data">
+      <li class="category__first-ele">{{ class_item.name }}</li>
+      <ul class="category__list category__sub">
+        <li class="category__list__item category__sub__item" :class="f[class_item.key]===item.v? 'active':''"
+            @click="()=>{handleClickClass(class_item.key, item.v)}"
+            v-for="item in class_item.value">{{ item.n }}
+        </li>
+      </ul>
+    </div>
+
+<!--      <div class="category__line">-->
+<!--        <li class="category__first-ele">类型</li>-->
+<!--        <ul class="category__list category__sub">-->
+<!--          <li class="category__list__item category__sub__item" :class="currentClass===item? 'active':''"-->
+<!--              @click="handleClickClass(item)"-->
+<!--              v-for="item in categoryData.vodClassData">{{ item }}-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </div>-->
+<!--      <div class="category__line">-->
+<!--        <li class="category__first-ele">地区</li>-->
+<!--        <ul class="category__list category__sub">-->
+<!--          <li class="category__list__item category__sub__item" :class="currentArea===item? 'active':''"-->
+<!--              @click="handleClickArea(item)"-->
+<!--              v-for="item in categoryData.vodAreaData">{{ item }}-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </div>-->
+<!--      <div class="category__line">-->
+<!--        <li class="category__first-ele">年份</li>-->
+<!--        <ul class="category__list category__sub">-->
+<!--          <li class="category__list__item category__sub__item" :class="currentYear===item? 'active':''"-->
+<!--              @click="handleClickYear(item)"-->
+<!--              v-for="item in categoryData.vodYearData">{{ item }}-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </div>-->
     </div>
 
 </template>
@@ -50,6 +60,7 @@ export default {
   components: {},
   data(){
     return {
+      f:{}, // 筛选变量
       currentClass:'全部',
       currentArea:'全部',
       currentYear:'全部',
@@ -67,12 +78,27 @@ export default {
     }
   },
   created() {
+    this.init_filter()
+    console.log('this.data:',this.data)
+    console.log('this.f',this.f)
     this.page = 1
     this.getData()
   },
+  watch: {
+    // 切换了分类数据重新把筛选全部清掉
+    data: function () {
+      this.init_filter()
+    },
+  },
   methods:{
-    handleClickClass(item){
-      this.currentClass = item
+    init_filter(){
+      this.data.forEach((class_item)=>{
+        this.f[class_item.key] = ''
+      })
+    },
+    handleClickClass(key,value){
+      this.f[key] = value
+      console.log(this.f)
       this.page = 1
       this.getData()
     },
