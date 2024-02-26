@@ -1,7 +1,6 @@
 <template>
   <div class="layout-content">
-
-  <Filter :data="filterData"/>
+    <Filter :data="filterData" v-if="filterData"/>
 
     <div class="lvideo-list">
        <VideoItem :vodDatas="vodDatas"/>
@@ -33,7 +32,7 @@ export default {
   data(){
     return {
       categoryId :'',
-      filterData:[],//分类数据
+      filterData:null,//分类数据
       currentClass:'全部',
       currentArea:'全部',
       currentYear:'全部',
@@ -49,9 +48,17 @@ export default {
     }
   },
   created() {
-    this.categoryId = this.$route.params.id;//路由设置参数，从路径中获取参数
+    this.categoryId = this.$route.query.t;//路由设置参数，从路径中获取参数
+    console.log('this.categoryId:',this.categoryId)
     this.page = 1
     this.getData()
+  },
+  watch: {
+    '$route.query.t': function () {
+      this.categoryId = this.$route.query.t
+      console.log('this.categoryId:',this.categoryId)
+      this.getData();
+    },
   },
   methods:{
     handleClickClass(item){
@@ -73,6 +80,8 @@ export default {
       return '/detail/' + vod_id
     },
     getData() {
+      this.filterData = this.categoryId?this.$store.state.vod.filters[this.categoryId]:null
+      console.log(this.filterData)
       const filterDict = {}
       filterDict['vod_type'] = 2
       if (this.currentClass !== '全部') {

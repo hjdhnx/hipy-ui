@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="portal">
-      <Header />
-      <Menu :category="category" />
-      <router-view />
+      <Header/>
+      <Menu :category="category"/>
+      <router-view/>
     </div>
-    <Footer />
+    <Footer/>
   </div>
 </template>
 
@@ -20,25 +20,33 @@ import {
 
 export default {
   name: 'VodWeb',
-  components: { Header, Footer, Menu },
+  components: {Header, Footer, Menu},
   data() {
     return {
       category: []
     }
   },
   created() {
-    this.getData()
+    this.getData();
+    console.log(this.getItem('filters'));
   },
   methods: {
     getData() {
       HomeApi().then((resp) => {
         this.category = resp.class;
-        // console.log(this.$store.vod);
-        // this.$store.vod.filters = resp.filters;
-        // this.$store.vod.recommend = resp.list;
+        this.setItem('class', resp.class);
+        this.setItem('filters', resp.filters);
+        this.setItem('recommend', resp.list);
       })
+    },
+    setItem(key, value) {
+      let new_value = {};
+      new_value[key] = value;
+      Object.assign(this.$store.state.vod,new_value);
+    },
+    getItem(key, value) {
+      return this.$store.state.vod[key] || value;
     }
-
   },
 }
 

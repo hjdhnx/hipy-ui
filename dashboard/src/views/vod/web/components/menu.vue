@@ -35,16 +35,14 @@
 		methods: {
 			handleNav(vid) {
 				this.currentMenu = vid;
-				if (vid == "index") {
-					// this.$router.push({
-					// 	path: 'web/index'
-					// });
-				} else {
-					this.$router.push({
-						path: '/vod/web/home/category',
-						query: vid
-					});
-				}
+        let query = {};
+        if(vid !== "index"){
+          Object.assign(query,{t:vid})
+        }
+        this.$router.push({
+          path: '/vod/web/category',
+          query: query
+        });
 			}
 		},
 		watch: {
