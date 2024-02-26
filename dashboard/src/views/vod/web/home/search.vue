@@ -3,7 +3,7 @@
 
     <h3>与"{{ keyword }}"相关视频：</h3>
     <div class="lvideo-list">
-       <VideoItem :vodDatas="tData.vodData"/>
+      <VideoItem :vodDatas="tData.vodData"/>
       <!-- <a class="video-item" :href="handleDetail(item.vod_id)" v-for="item in tData.vodData">
         <div class="cover-wrap">
           <img :src="item.vod_pic"/>

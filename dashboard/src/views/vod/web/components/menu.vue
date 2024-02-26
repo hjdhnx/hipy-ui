@@ -34,16 +34,14 @@
 		methods: {
 			handleNav(vid) {//这里跳转有问题，首页到分类会出现刷新
 				this.currentMenu = vid;
-				if (vid == "index") {
-					this.$router.push({
-						name: 'VodWebIndex'
-					});
-				} else {
-					this.$router.push({
-						name: 'VodCategory',
-						query: {'vid':vid}
-					});
-				}
+        let query = {};
+        if(vid !== "index"){
+          Object.assign(query,{t:vid})
+        }
+        this.$router.push({
+          path: '/vod/web/category',
+          query: query
+        });
 			}
 		},
 		watch: {

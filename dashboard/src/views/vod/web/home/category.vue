@@ -34,12 +34,21 @@ export default {
       currentClass:[]//选中的筛选集合
     }
   },
-  created() {
+  created() { 
+    this.categoryId = this.$route.query.t;//路由设置参数，从路径中获取参数
+    console.log('this.categoryId:',this.categoryId)
     //this.filterData = this.$store.vod.filters;
     //this.categoryId = this.$route.params.vid;//路由设置参数，从路径中获取参数
 
     this.page = 1
     //this.getData()
+  }, 
+  watch: {
+    '$route.query.t': function () {
+      this.categoryId = this.$route.query.t
+      console.log('this.categoryId:',this.categoryId)
+      this.getData();
+    },
   },
   methods: {
     handleFilterSelection(item) {
@@ -48,7 +57,8 @@ export default {
       this.getData()
     },
     getData() {
-
+      this.filterData = this.categoryId?this.$store.state.vod.filters[this.categoryId]:null
+      console.log(this.filterData)
       CateGoryApi(this.categoryId,this.page,this.currentClass).then((resp) => {
         console.log(resp)
         //this.vodDatas = resp.list;
