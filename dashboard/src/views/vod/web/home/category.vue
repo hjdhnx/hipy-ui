@@ -166,7 +166,7 @@ export default {
 
     .video-item {
       width: calc((100% - 3 * 16px) / 4);
-      aspect-ratio: 3/5;
+      //aspect-ratio: 3/5;
       min-height: 120px;
 
       .cover-wrap {
@@ -186,11 +186,18 @@ export default {
         }
 
         .remarks {
-          position: absolute;
-          right: 4px;
-          bottom: 1px;
+          position: relative;
+          top: auto;
+          right: 0px;
+          bottom: 66px;
           color: #fff;
           font-size: 12px;
+          padding: 5px;
+          background-color: green;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          border-top-right-radius: 5px;
+          border-bottom-right-radius: 5px;
         }
       }
 

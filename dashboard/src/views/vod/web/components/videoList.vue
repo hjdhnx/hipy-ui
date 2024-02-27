@@ -33,7 +33,7 @@ export default {
       this.$router.push({
         path: '/vod/web/detail',
         query: {
-          ids:vod_id
+          ids: vod_id
         }
       });
     },
@@ -72,6 +72,19 @@ export default {
       }
 
       .remarks {
+        position: relative;
+        top: auto;
+        right: 4px;
+        bottom: 66px;
+        color: #fff;
+        font-size: 12px;
+        padding: 10px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        border-top-right-radius: 15px;
+      }
+
+      .remarks1111 {
         position: absolute;
         top: 75%;
         left: 0;
