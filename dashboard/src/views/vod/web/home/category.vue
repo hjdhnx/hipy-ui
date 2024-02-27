@@ -166,7 +166,7 @@ export default {
 
     .video-item {
       width: calc((100% - 3 * 16px) / 4);
-      //aspect-ratio: 3/5;
+      aspect-ratio: 3/5;
       min-height: 120px;
 
       .cover-wrap {
@@ -196,6 +196,7 @@ export default {
           background-color: green;
           text-overflow: ellipsis;
           overflow: hidden;
+        //  text-wrap: nowrap;
           border-top-right-radius: 5px;
           border-bottom-right-radius: 5px;
         }
@@ -207,10 +208,6 @@ export default {
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
-        }
-
-        .info {
-          display: none;
         }
 
       }
