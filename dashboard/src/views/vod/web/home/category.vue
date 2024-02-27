@@ -61,7 +61,7 @@ export default {
       CateGoryApi(this.categoryId,this.page,this.currentClass).then((resp) => {
         //console.log("resp:",resp)
          this.vodDatas = resp.list;
-         this.num_pages=resp.pagecount;
+         this.num_pages= resp.pagecount;
       })
     },
     handlePre() {

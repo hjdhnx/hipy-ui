@@ -30,22 +30,20 @@ export default {
   },
   created() {
     this.keyword = this.$route.query.keyword;
-    this.pg = Number(this.$route.query.pg || 1);
-    SearchApi(this.keyword, this.pg).then((resp) => {
-      this.vodDatas = resp.list
-    })
+    this.page = Number(this.$route.query.pg || 1);
+    this.getData()
   },
   watch: {
     '$route.query.keyword': function () {
       this.keyword = this.$route.query.keyword
     },
     '$route.query.pg': function () {
-      this.pg = Number(this.$route.query.pg || 1);
+      this.page = Number(this.$route.query.pg || 1);
     },
-    $route() {
-      this.keyword = this.$route.query.keyword
-      this.pg = Number(this.$route.query.pg || 1);
-    },
+    // $route() {
+    //   this.keyword = this.$route.query.keyword
+    //   this.page = Number(this.$route.query.pg || 1);
+    // },
   },
   methods: {
     handleDetail(vod_id) {
@@ -64,18 +62,15 @@ export default {
       }
     },
     getData() {
-      const filterDict = {}
-      filterDict['keyword'] = this.keyword
-      filterDict['page'] = this.page
-      // listApi(filterDict).then(res => {
-      //   console.log(res.data)
-      //   tData.vodData = res.data
-      //   // 分页
-      //   page.value = res.page
-      //   num_pages.value = res.num_pages
-      // }).catch(err => {
-      //   console.log(err)
-      // })
+      // const filterDict = {}
+      // filterDict['keyword'] = this.keyword
+      // filterDict['page'] = this.page
+      SearchApi(this.keyword, this.page).then((resp) => {
+        this.vodDatas = resp.list
+        this.num_pages = 10
+      }).catch(err => {
+        console.log(err)
+      })
     }
   },
 }

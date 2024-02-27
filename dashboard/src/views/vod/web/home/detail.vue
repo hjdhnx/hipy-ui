@@ -1,8 +1,5 @@
 <template>
   <div class="detail">
-
-    <Header/>
-
     <div class="player-wrap">
       <div class="left">
         <video id="player-box"></video>
