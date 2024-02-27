@@ -19,7 +19,7 @@ import videoList from '@/views/vod/web/components/videoList.vue'
 import {CateGoryApi} from "@/api/vod/web";
 
 export default {
-  name: 'VodCategory',
+  name: 'VodWebCategory',
   components: { Filters, videoList },
   data() {
     return {
@@ -39,7 +39,7 @@ export default {
     //this.categoryId = this.$route.params.vid;//路由设置参数，从路径中获取参数
 
     this.page = 1
-    //this.getData()
+    this.getData()
   },
   watch: {
     '$route.query.t': function () {

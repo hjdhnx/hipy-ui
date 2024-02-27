@@ -8,10 +8,10 @@
         <video id="player-box"></video>
 
       </div>
-      <div class="right">
-        <h3>{{ $t("Pages.playUrl") }}</h3>
+      <div class="right" v-for="tab_item in tData.playData">
+        <h3>线路</h3>
         <div class="p-list">
-          <div class="p-item" :class="currentLink===item.link? 'active':''" v-for="item in tData.playData"
+          <div class="p-item" :class="currentLink===item.link? 'active':''" v-for="item in tab_item"
                @click="startPlay(item.link)">{{ item.label }}
           </div>
         </div>
@@ -27,8 +27,8 @@
         <div class="info-wrap">
           <img :src="tData.detailData.vod_pic"/>
           <div class="info">
-            <div class="info-item">{{ $t("Pages.director") }}: {{ tData.detailData.vod_director }}</div>
-            <div class="info-item">{{ $t("Pages.actors") }}: {{ tData.detailData.vod_actor }}</div>
+            <div class="info-item">导演: {{ tData.detailData.vod_director }}</div>
+            <div class="info-item">演员: {{ tData.detailData.vod_actor }}</div>
             <div class="info-item">
               <div v-html="tData.detailData.brief"></div>
             </div>
@@ -56,6 +56,7 @@
 </template>
 <script>
 import Header from '@/views/vod/web/components/header.vue'
+import {DetailApi} from "@/api/vod/web";
 
 export default {
   name: 'VodWebDetail',
@@ -68,19 +69,28 @@ export default {
         playData: [],
         recommendData: []
       },
+      vod_id: ''
     }
   },
   created() {
-
+    this.vod_id = this.$route.query.ids;//路由设置参数，从路径中获取参数
+    this.getData()
   },
+  watch: {
+    '$route.query.ids': function () {
+      this.vod_id = this.$route.query.ids
+      this.getData();
+    },
+  },
+
   methods: {
-    handleDetail(vod_id){
+    handleDetail(vod_id) {
       return '/detail/' + vod_id
     },
-    startPlay(url){
+    startPlay(url) {
       console.log(url)
     },
-    setSEO(){
+    setSEO() {
       let title = this.tData.detailData.vod_name
       let director = this.tData.detailData.vod_director
       let actor = this.tData.detailData.vod_actor
@@ -89,43 +99,52 @@ export default {
         let seoKeywords = title + ",在线观看," + director
         let seoDescription = title + ",在线观看," + actor
         document.title = seoTitle
-        document.querySelector('meta[name="keywords"]').setAttribute('content', seoKeywords)
-        document.querySelector('meta[name="description"]').setAttribute('content', seoDescription)
+        let $keywords = document.querySelector('meta[name="keywords"]')
+        let $description = document.querySelector('meta[name="description"]')
+        if ($keywords) {
+          $keywords.setAttribute('content', seoKeywords)
+        }
+        if ($description) {
+          $description.setAttribute('content', seoDescription)
+        }
       }
     },
-    getData(){
-      const filterDict = {}
-      filterDict['vod_id'] = id
-      // detailApi(filterDict).then(res => {
-      //   tData.detailData = res.data
-      //   tData.detailData.brief = "简介：" + tData.detailData.vod_content.substring(0, 100) + '...'
-      //   tData.detailData.description = tData.detailData.vod_content
-      //   // 设置seo词汇
-      //   setSEO()
-      //   // 剥离播放地址
-      //   let playData = []
-      //   let vodPlayUrl = tData.detailData.vod_play_url
-      //   let vodPlayList = vodPlayUrl.split("$$$")
-      //   vodPlayList.forEach(item => {
-      //     let playItem = item.split("$")
-      //     let label = playItem[0]
-      //     let link = playItem[1]
-      //     if(link.endsWith('.m3u8')){
-      //       playData.push({
-      //         label: label,
-      //         link: link
-      //       })
-      //     }
-      //   })
-      //   tData.playData = playData
-      //   // 默认播首个
-      //   currentLink.value = tData.playData[0].link
-      //   startPlay(currentLink.value)
-      //   // 获取推荐
-      //   getRecommendData()
-      // }).catch(err => {
-      //   console.log(err)
-      // })
+    getData() {
+      DetailApi(this.vod_id).then(res => {
+        if (res.list && res.list.length > 0) {
+          this.tData.detailData = res.list[0]
+          this.tData.detailData.brief = "简介：" + this.tData.detailData.vod_content.substring(0, 100) + '...'
+          this.tData.detailData.description = this.tData.detailData.vod_content
+          // 设置seo词汇
+          this.setSEO()
+          // 剥离播放地址
+          let playData = []
+          let vodPlayUrl = this.tData.detailData.vod_play_url
+          let vodTabList = vodPlayUrl.split("$$$")
+          vodTabList.forEach(tab_item => {
+            let vodPlayList = tab_item.split("#")
+            let tabPlayData = []
+            vodPlayList.forEach(item => {
+              let playItem = item.split("$")
+              let label = playItem[0]
+              let link = playItem[1]
+              tabPlayData.push({
+                label: label,
+                link: link
+              })
+            })
+            playData.push(tabPlayData)
+          })
+          this.tData.playData = playData
+          // 默认播首个
+          this.currentLink = this.tData.playData[0].link
+          // startPlay(currentLink.value)
+          // 获取推荐
+          // getRecommendData()
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     },
     getRecommendData() {
       // recommendApi({

@@ -28,7 +28,7 @@ export default {
   },
   created() {
     this.getData();
-    console.log(this.getItem('filters'));
+    console.log('filters:', this.getItem('filters'));
   },
   methods: {
     getData() {
@@ -42,7 +42,7 @@ export default {
     setItem(key, value) {
       let new_value = {};
       new_value[key] = value;
-      Object.assign(this.$store.state.vod,new_value);
+      Object.assign(this.$store.state.vod, new_value);
     },
     getItem(key, value) {
       return this.$store.state.vod[key] || value;

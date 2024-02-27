@@ -29,11 +29,19 @@
 			}
 		},
 		created() {
-			this.handleNav('index');
+      this.currentMenu = this.$route.query.t;
 		},
+    watch: {
+      '$route.query.t': function () {
+        this.currentMenu = this.$route.query.t
+      },
+      category(newVal) {
+        this.menuData = this.menuData.concat(newVal);
+      }
+    },
 		methods: {
-			handleNav(vid) {//这里跳转有问题，首页到分类会出现刷新
-				this.currentMenu = vid;
+			handleNav(vid) {
+        console.log('this.$route.name:',this.$route.name)
         let query = {};
         if(vid !== "index"){
           Object.assign(query,{t:vid})
@@ -44,11 +52,7 @@
         });
 			}
 		},
-		watch: {
-			category(newVal) {
-				this.menuData = this.menuData.concat(newVal);
-			}
-		}
+
 	}
 </script>
 
