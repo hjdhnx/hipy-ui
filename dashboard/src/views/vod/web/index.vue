@@ -31,12 +31,22 @@ export default {
     console.log('filters:', this.getItem('filters'));
   },
   methods: {
+    goHome(){
+      if(this.$route.name === 'VodWeb'){
+        console.log('自动跳转到分类页的首页')
+        this.$router.push({
+          path: '/vod/web/category',
+          query: {}
+        });
+      }
+    },
     getData() {
       HomeApi().then((resp) => {
         this.category = resp.class;
         //this.setItem('class', resp.class);
         this.setItem('filters', resp.filters);
         this.setItem('recommend', resp.list);
+        this.goHome();
       })
     },
     setItem(key, value) {
