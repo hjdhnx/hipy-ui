@@ -41,6 +41,12 @@
     },
 		methods: {
 			handleNav(vid) {
+        if(vid === 'index'){
+          this.$router.push({
+            path: '/vod/web/index',
+          });
+          return
+        }
         console.log('this.$route.name:',this.$route.name)
         let query = {};
         if(vid !== "index"){
