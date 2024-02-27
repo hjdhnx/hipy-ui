@@ -46,6 +46,10 @@ import DictTag from '@/components/DictTag'
 import * as filters from './filters'
 import {getParameter} from "@/api/system/parameter"; // global filters
 
+import VideoPlayer from 'vue-video-player/src';
+import 'vue-video-player/src/custom-theme.css'
+import 'video.js/dist/video-js.css'
+import 'videojs-contrib-hls'
 
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
@@ -88,6 +92,7 @@ import button_permission from './directive/button_permission'
 Vue.use(button_permission)
 Vue.use(plugins)
 Vue.use(VueClipboard)
+Vue.use(VideoPlayer)
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size

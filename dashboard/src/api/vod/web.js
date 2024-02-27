@@ -1,8 +1,8 @@
 import request from '@/utils/request'
-import { base64Encode, base64Decode } from "@/utils/jsencrypt";
+import {base64Encode, base64Decode} from "@/utils/jsencrypt";
 
-const api_url = 'https://www.smarth.fun:8123/api/v1/vod/cntv%E5%A4%AE%E8%A7%86?pwd=dzyyds'
-const extend = 'https://www.smarth.fun:8123/files/hipy/cntv央视.json'
+const api_url = process.env.VUE_APP_BASE_API + 'vod/cntv%E5%A4%AE%E8%A7%86?pwd=dzyyds'
+const extend = new URL(process.env.VUE_APP_BASE_API).origin + '/files/hipy/cntv央视.json'
 
 /**
  * 主页接口,返回首页推荐列表及分类数据
