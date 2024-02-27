@@ -2,43 +2,29 @@
   <div class="layout-content">
 
     <h3>与"{{ keyword }}"相关视频：</h3>
-    <div class="lvideo-list">
-      <VideoItem :vodDatas="tData.vodData"/>
-      <!-- <a class="video-item" :href="handleDetail(item.vod_id)" v-for="item in tData.vodData">
-        <div class="cover-wrap">
-          <img :src="item.vod_pic"/>
-          <span class="remarks">{{ item.vod_remarks }}</span>
-        </div>
-        <div class="meta-wrap">
-          <div class="title">{{ item.vod_name }}</div>
-          <div class="info">{{ getFormatTime(item.vod_time, false) }}更新</div>
-        </div>
-      </a> -->
-    </div>
+
+    <videoList :videos="vodDatas" />
 
     <div class="page-wrap" v-if="num_pages > 1">
-      <div class="page-item" :class="page === 1? 'disable':''" @click="handlePre()">上页</div>
-      <div class="page-item" :class="page === num_pages? 'disable':''" @click="handleNext()">下页</div>
+      <div class="page-item" :class="page === 1 ? 'disable' : ''" @click="handlePre()">上页</div>
+      <div class="page-item" :class="page === num_pages ? 'disable' : ''" @click="handleNext()">下页</div>
     </div>
   </div>
-
 </template>
 <script>
 import {
   SearchApi
 } from "@/api/vod/web";
 
-import VideoItem from '@/views/vod/web/components/videoItem.vue'
+import videoList from '@/views/vod/web/components/videoList.vue'
 export default {
   name: 'VodWebSearch',
-  components: {VideoItem},
+  components: { videoList },
   data() {
     return {
       page: 1,
       num_pages: 0,
-      tData: {
-        vodData: []
-      },
+      vodDatas: [],
       keyword: '',
     }
   },
@@ -46,7 +32,7 @@ export default {
     this.keyword = this.$route.query.keyword;
     this.pg = Number(this.$route.query.pg || 1);
     SearchApi(this.keyword, this.pg).then((resp) => {
-      this.tData.vodData = resp.list
+      this.vodDatas = resp.list
     })
   },
   watch: {
@@ -96,19 +82,6 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-
-@media screen and (min-width: 1px) and (max-width: 768px) {
-  .video-item {
-    width: calc((100% - 2 * 16px) / 3) !important;
-  }
-
-  .category__list {
-    white-space: nowrap !important;
-    overflow-x: auto !important;
-  }
-}
-
-
 .layout-content {
   width: 100%;
   padding: 1px 0px;
@@ -174,67 +147,15 @@ export default {
   }
 
 
-  .lvideo-list {
-    min-height: 200px;
-    margin-top: 12px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-
-    .video-item {
-      width: calc((100% - 3 * 16px) / 4);
-      aspect-ratio: 3/5;
-      min-height: 120px;
-
-      .cover-wrap {
-        position: relative;
-        width: 100%;
-        height: 85%;
-
-        img {
-          border-radius: 4px;
-          overflow: hidden;
-          // todo 修改默认图
-          background-color: #e6f2f5;
-          width: 100%;
-          height: 100%;
-          background-size: cover;
-          object-fit: cover;
-        }
-
-        .remarks {
-          position: absolute;
-          right: 4px;
-          bottom: 1px;
-          color: #fff;
-          font-size: 12px;
-        }
-      }
-
-      .meta-wrap {
-        .title {
-          text-align: center;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          white-space: nowrap;
-        }
-
-        .info {
-          display: none;
-        }
-
-      }
-
-    }
-  }
-
   .page-wrap {
     margin-top: 16px;
     display: flex;
     flex-direction: row;
     gap: 16px;
-    justify-content: center; /* 水平居中 */
-    align-items: center; /* 垂直居中 */
+    justify-content: center;
+    /* 水平居中 */
+    align-items: center;
+    /* 垂直居中 */
 
     .page-item {
       user-select: none;

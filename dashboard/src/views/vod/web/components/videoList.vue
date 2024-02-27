@@ -1,0 +1,102 @@
+<template>
+  <div class="lvideo-list">
+    <a class="video-item" :href="handleDetail(item.vod_id)" v-for="item in videoDatas">
+      <div class="cover-wrap">
+        <img :src="item.vod_pic" />
+        <span v-if="item.vod_remarks" class="remarks">{{ item.vod_remarks }}</span>
+        <div class="title">{{ item.vod_name }}</div>
+      </div>
+    </a>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    videos: {
+      type: Array,
+      required: true
+    }
+  },
+  data() {
+    return {
+      videoDatas: [],
+    }
+  },
+  watch: {
+    videos(news) {
+      this.videoDatas = news;
+    }
+  },
+  methods: {
+    handleDetail(vod_id) {
+      return '../detail?=' + vod_id
+    },
+  },
+}
+</script>
+
+
+<style rel="stylesheet/scss" lang="scss">
+.lvideo-list {
+  min-height: 200px;
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  .video-item {
+    width: calc((100% - 3 * 16px) / 4);
+    aspect-ratio: 3/5;
+    min-height: 120px;
+
+    .cover-wrap {
+      position: absolute;
+      width: 100%;
+      //height: 85%;
+      display: inline-block;
+      /* Display as inline block to auto adjust width */
+
+      img {
+        overflow: hidden;
+        background-color: #e6f2f5;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        object-fit: cover;
+      }
+
+      .remarks {
+        position: absolute;
+        top: 75%;
+        left: 0;
+        bottom: 30px;
+        color: white;
+        text-align: left;
+        font-size: 14px;
+        white-space: nowrap;
+        background-color: green;
+        border-top-right-radius: 5px;
+      }
+
+      .title {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        /* Semi-transparent black background */
+        color: white;
+        padding: 5px;
+        text-align: center;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        /* Prevent line breaks */
+      }
+
+    }
+
+  }
+}
+</style>

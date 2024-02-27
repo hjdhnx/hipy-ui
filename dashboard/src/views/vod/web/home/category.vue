@@ -3,9 +3,7 @@
 
     <Filters :data="filterData" @filterSelected="handleFilterSelection" v-if="filterData"/>
 
-    <div class="lvideo-list">
-      <VideoItem :vodDatas="vodDatas" />
-    </div>
+    <videoList :videos="vodDatas" />
 
     <div class="page-wrap" v-if="num_pages > 1">
       <div class="page-item" :class="page === 1 ? 'disable' : ''" @click="handlePre()">上页</div>
@@ -17,12 +15,12 @@
 
 <script>
 import Filters from '@/views/vod/web/components/filter.vue'
-import VideoItem from '@/views/vod/web/components/videoItem.vue'
+import videoList from '@/views/vod/web/components/videoList.vue'
 import {CateGoryApi} from "@/api/vod/web";
 
 export default {
   name: 'VodCategory',
-  components: { Filters, VideoItem },
+  components: { Filters, videoList },
   data() {
     return {
       categoryId: '',
@@ -31,7 +29,7 @@ export default {
       num_pages: 0,
 
       vodDatas: [],
-      currentClass:[]//选中的筛选集合
+      currentClass:{}//选中的筛选集合
     }
   },
   created() {
@@ -52,6 +50,7 @@ export default {
   },
   methods: {
     handleFilterSelection(item) {
+      console.log('handleFilterSelection:',item)
       this.currentClass = item
       this.page = 1
       this.getData()
@@ -60,9 +59,9 @@ export default {
       this.filterData = this.categoryId?this.$store.state.vod.filters[this.categoryId]:null
       console.log('this.filterData:',this.filterData)
       CateGoryApi(this.categoryId,this.page,this.currentClass).then((resp) => {
-        console.log(resp)
-        // this.vodDatas = resp.list;
-        // this.num_pages=resp.count;
+        //console.log("resp:",resp)
+         this.vodDatas = resp.list;
+         this.num_pages=resp.pagecount;
       })
     },
     handlePre() {
