@@ -1,4 +1,5 @@
 import JSEncrypt from "jsencrypt/bin/jsencrypt.min";
+import CryptoJS from 'crypto-js';
 
 // 密钥对生成 http://web.chacuo.net/netrsakeypair
 
@@ -28,3 +29,16 @@ export function decrypt(txt) {
   return encryptor.decrypt(txt); // 对数据进行解密
 }
 
+export function base64Encode(text) {
+  return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
+  // return text
+}
+
+export function base64Decode(text) {
+  return CryptoJS.enc.Utf8.stringify(CryptoJS.enc.Base64.parse(text));
+  // return text
+}
+
+export function md5(text) {
+  return CryptoJS.MD5(text).toString();
+}

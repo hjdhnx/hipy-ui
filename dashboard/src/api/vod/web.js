@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { base64Encode, base64Decode } from "@/utils/jsencrypt";
 
 const api_url = 'https://www.smarth.fun:8123/api/v1/vod/cntv%E5%A4%AE%E8%A7%86?pwd=dzyyds'
 const extend = 'https://www.smarth.fun:8123/files/hipy/cntv央视.json'
@@ -52,7 +53,8 @@ export function SearchApi(wd, pg) {
  */
 export function CateGoryApi(t, pg, filters) {
   pg = pg || 1;
-  filters = filters || ''
+  filters = filters || {}
+  let ext_filters = base64Encode(JSON.stringify(filters))
   return request({
     url: api_url + '&ac=list',
     responseType: 'json',
@@ -62,7 +64,7 @@ export function CateGoryApi(t, pg, filters) {
       filter: true,
       t: t,
       pg: pg,
-      ext: filters
+      ext: ext_filters
     }
   })
 }
