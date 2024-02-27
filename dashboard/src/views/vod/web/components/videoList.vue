@@ -1,6 +1,6 @@
 <template>
   <div class="lvideo-list">
-    <a class="video-item" :href="handleDetail(item.vod_id)" v-for="item in videoDatas">
+    <a class="video-item" @click="handleDetail(item.vod_id)" v-for="item in videoDatas">
       <div class="cover-wrap">
         <img :src="item.vod_pic" />
         <span v-if="item.vod_remarks" class="remarks">{{ item.vod_remarks }}</span>
@@ -30,7 +30,12 @@ export default {
   },
   methods: {
     handleDetail(vod_id) {
-      return '../detail?=' + vod_id
+      this.$router.push({
+        path: '/vod/web/detail',
+        query: {
+          ids:vod_id
+        }
+      });
     },
   },
 }
