@@ -45,19 +45,21 @@ export default {
     '$route.query.t': function () {
       this.categoryId = this.$route.query.t
       console.log('this.categoryId:',this.categoryId)
+      this.currentClass={};
       this.getData();
     },
   },
   methods: {
     handleFilterSelection(item) {
-      console.log('handleFilterSelection:',item)
+      //console.log('handleFilterSelection:',item)
       this.currentClass = item
       this.page = 1
       this.getData()
     },
     getData() {
       this.filterData = this.categoryId?this.$store.state.vod.filters[this.categoryId]:null
-      console.log('this.filterData:',this.filterData)
+      //console.log('this.filterData:',this.filterData)
+      console.log('this.currentClass:',this.currentClass)
       CateGoryApi(this.categoryId,this.page,this.currentClass).then((resp) => {
         //console.log("resp:",resp)
          this.vodDatas = resp.list;
