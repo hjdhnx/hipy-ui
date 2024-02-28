@@ -2,9 +2,10 @@
   <div class="detail">
     <div class="player-wrap">
       <div class="left">
-<!--        <video id="player-box"></video>-->
+        <!--        <video id="player-box"></video>-->
 
         <video-player
+          id="player-box"
           ref="videoPlayer"
           class="video-player vjs-custom-skin"
           :playsinline="false"
@@ -20,16 +21,16 @@
           @statechanged="playerStateChanged($event)"
         />
 
-<!--        <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :options="playOptions"></video-player>-->
-<!--        <video-player class="player-video" ref="videoPlayer" :options="playOptions"></video-player>-->
+        <!--        <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :options="playOptions"></video-player>-->
+        <!--        <video-player class="player-video" ref="videoPlayer" :options="playOptions"></video-player>-->
 
 
       </div>
-      <div class="right" v-for="tab_item in tData.playData">
-        <h3>线路</h3>
+      <div class="right" v-for="(tab_item, tab_index) in tData.playData" :key="tab_index">
+        <h3>{{ tData.tabList[tab_index] }}</h3>
         <div class="p-list">
           <div class="p-item" :class="currentLink===item.link? 'active':''" v-for="item in tab_item"
-               @click="startPlay(item.link)">{{ item.label }}
+               @click="startPlay(item.link,tData.tabList[tab_index])">{{ item.label }}
           </div>
         </div>
       </div>
@@ -73,7 +74,8 @@
 </template>
 <script>
 import Header from '@/views/vod/web/components/header.vue'
-import {DetailApi,PlayApi} from "@/api/vod/web";
+import LogoImg from '@/assets/images/logo.png'
+import {DetailApi, PlayApi} from "@/api/vod/web";
 
 export default {
   name: 'VodWebDetail',
@@ -81,9 +83,11 @@ export default {
   data() {
     return {
       currentLink: '',
+      currentTab: '',
       tData: {
         detailData: {},
         playData: [],
+        tabList: [],
         recommendData: []
       },
       vod_id: '',
@@ -91,10 +95,10 @@ export default {
       playOptions: {
         height: "200px",
         width: "100%",
-        playbackRates: [1.0,1.5,2.0,2.5,3.0,3.5,4.0], // 可选的播放速度
+        playbackRates: [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0], // 可选的播放速度
         autoplay: true, // 如果为true,浏览器准备好时开始回放
         muted: false, // 默认情况下静音播放
-        loop: false, // 是否视频一结束就重新开始
+        loop: false, // 是否视频一结束就重新开始循环播放
         preload: "auto", // 建议浏览器在<video>加载元素后是否应该开始下载视频数据，auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
         language: "zh-CN",
         aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值，值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
@@ -109,20 +113,23 @@ export default {
             src: 'https://newcntv.qcloudcdn.com/asp/hls/2000/0303000a/3/default/ec43c5b995f24fe9a6101367a7148347/2000.m3u8', // url地址，在使用本地的资源时，需要用require()引入，否则控制台会报错
           },
         ],
-        poster: "./gcy-logo-200.png", // 设置封面地址
+        // poster: LogoImg, // 设置封面地址
+        poster: false, // 设置封面地址
         notSupportedMessage: "此视频暂无法播放，请稍后再试", // 允许覆盖Video.js无法播放媒体源时显示的默认信息
         controlBar: {
-          currentTimeDisplay: true,
+          currentTimeDisplay: true, // 当前时间
           progressControl: true,  // 是否显示进度条
           playbackRateMenuButton: true, // 是否显示调整播放倍速按钮
           timeDivider: true, // 当前时间和持续时间的分隔符
           durationDisplay: true, // 显示持续时间
           remainingTimeDisplay: true, // 是否显示剩余时间功能
           fullscreenToggle: true, // 是否显示全屏按钮
+          volumeControl: false, // 声音控制键
+          playToggle: true, // 暂停和播放键
         },
       },
 
-      }
+    }
   },
   created() {
     this.vod_id = this.$route.query.ids;//路由设置参数，从路径中获取参数
@@ -139,18 +146,19 @@ export default {
     handleDetail(vod_id) {
       return '/detail/' + vod_id
     },
-    startPlay(url) {
-      console.log('url:',url)
+    startPlay(url, flag) {
+      console.log('url:', url, ' flag:', flag)
       this.currentLink = url
-      PlayApi(url,'CCTV').then(resp=>{
+      this.currentTab = flag
+      PlayApi(url, flag).then(resp => {
         console.log(resp)
         let $player = document.querySelector('video[id="player-box"]')
-        if($player){
-          $player.setAttribute('src',resp.url)
-          $player.setAttribute('autoplay',true)
+        if ($player) {
+          $player.setAttribute('src', resp.url)
+          $player.setAttribute('autoplay', true)
         }
         this.playOptions.sources[0].src = resp.url
-        console.log(this.$refs.videoPlayer.player)
+        // console.log(this.$refs.videoPlayer.player)
         // this.load()
       })
     },
@@ -177,12 +185,16 @@ export default {
       DetailApi(this.vod_id).then(res => {
         if (res.list && res.list.length > 0) {
           this.tData.detailData = res.list[0]
+
+          // 设置视频封面地址
+          this.playOptions.poster = this.tData.detailData.vod_pic
           this.tData.detailData.brief = "简介：" + this.tData.detailData.vod_content.substring(0, 100) + '...'
           this.tData.detailData.description = this.tData.detailData.vod_content
           // 设置seo词汇
           this.setSEO()
           // 剥离播放地址
           let playData = []
+          let tabList = this.tData.detailData.vod_play_from.split('$$$')
           let vodPlayUrl = this.tData.detailData.vod_play_url
           let vodTabList = vodPlayUrl.split("$$$")
           vodTabList.forEach(tab_item => {
@@ -200,9 +212,8 @@ export default {
             playData.push(tabPlayData)
           })
           this.tData.playData = playData
-          // 默认播首个
-          this.currentLink = playData[0][0].link
-          this.startPlay(this.currentLink)
+          this.tData.tabList = tabList
+          this.startPlay(playData[0][0].link, tabList[0])
           // 获取推荐
           // getRecommendData()
         }
@@ -295,7 +306,7 @@ export default {
       // 视频播放器的方法调用，要使用this.$refs.videoPlayer.player这个对象去调用
       this.$refs.videoPlayer.player.play()
     },
-    load(){
+    load() {
       this.$refs.videoPlayer.player.load()
     }
 
@@ -303,6 +314,13 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss">
+/* 播放按钮换成圆形 */
+.vjs-custom-skin > .video-js .vjs-big-play-button {
+  height: 2em;
+  width: 2em;
+  line-height: 2em;
+  border-radius: 1em;
+}
 
 @media screen and (min-width: 1px) and (max-width: 768px) {
   // 播放器相关
