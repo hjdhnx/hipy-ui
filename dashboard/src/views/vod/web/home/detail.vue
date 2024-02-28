@@ -2,8 +2,6 @@
   <div class="detail">
     <div class="player-wrap">
       <div class="left">
-        <!--        <video id="player-box"></video>-->
-
         <video-player
           id="player-box"
           ref="videoPlayer"
@@ -20,11 +18,6 @@
           @timeupdate="onPlayerTimeupdate($event)"
           @statechanged="playerStateChanged($event)"
         />
-
-        <!--        <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :options="playOptions"></video-player>-->
-        <!--        <video-player class="player-video" ref="videoPlayer" :options="playOptions"></video-player>-->
-
-
       </div>
       <div class="right" v-for="(tab_item, tab_index) in tData.playData" :key="tab_index">
         <h3>{{ tData.tabList[tab_index] }}</h3>
@@ -84,6 +77,7 @@ export default {
     return {
       currentLink: '',
       currentTab: '',
+      playedTime: 0,
       tData: {
         detailData: {},
         playData: [],
@@ -113,8 +107,12 @@ export default {
             src: 'https://newcntv.qcloudcdn.com/asp/hls/2000/0303000a/3/default/ec43c5b995f24fe9a6101367a7148347/2000.m3u8', // url地址，在使用本地的资源时，需要用require()引入，否则控制台会报错
           },
         ],
-        // poster: LogoImg, // 设置封面地址
-        poster: false, // 设置封面地址
+        // 设置封面地址
+        poster: {
+          type: String,
+          // LogoImg
+          default: ''
+        },
         notSupportedMessage: "此视频暂无法播放，请稍后再试", // 允许覆盖Video.js无法播放媒体源时显示的默认信息
         controlBar: {
           currentTimeDisplay: true, // 当前时间
@@ -148,6 +146,9 @@ export default {
     },
     startPlay(url, flag) {
       console.log('url:', url, ' flag:', flag)
+      if (this.currentLink !== url) { // 切换视频清空播放进度
+        this.playedTime = 0
+      }
       this.currentLink = url
       this.currentTab = flag
       PlayApi(url, flag).then(resp => {
@@ -188,6 +189,7 @@ export default {
 
           // 设置视频封面地址
           this.playOptions.poster = this.tData.detailData.vod_pic
+          // 设置简介
           this.tData.detailData.brief = "简介：" + this.tData.detailData.vod_content.substring(0, 100) + '...'
           this.tData.detailData.description = this.tData.detailData.vod_content
           // 设置seo词汇
@@ -238,7 +240,7 @@ export default {
     // 视频播放
     onPlayerPlay(player) {
       console.log('播放了');
-      console.log(player);
+      // console.log(player);
       let playTime = 0;
       if (
         Number(Math.floor(this.playedTime)) ===
@@ -257,28 +259,28 @@ export default {
     // 视频暂停的
     onPlayerPause(player) {
       console.log('暂停中');
-      console.log(player);
+      // console.log(player);
       this.playedTime = player.currentTime();
     },
     // 视频播放完
     onPlayerEnd(player) {
       console.log('播放结束了');
-      console.log(player);
+      // console.log(player);
     },
     // DOM元素上的readyState更改导致播放停止
     onPlayerWaiting(player) {
       console.log("播放停止中");
-      console.log(player);
+      // console.log(player);
     },
     // 视频已开始播放
     onPlayerPlaying(player) {
       console.log("开始播放了");
-      console.log(player);
+      // console.log(player);
     },
     // 当播放器在当前播放位置下载数据时触发
     onPlayerLoadeddata(player) {
       console.log("开始下载数据");
-      console.log(player);
+      // console.log(player);
     },
     // 当前播放位置发生变化时触发
     onPlayerTimeupdate(player) {
