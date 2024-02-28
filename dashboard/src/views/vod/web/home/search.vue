@@ -81,65 +81,65 @@ export default {
   width: 100%;
   padding: 1px 0px;
 
-  .category-layout {
-    .category__line {
-      display: flex;
-      font-size: 14px;
-
-      .category__first-ele {
-        line-height: 32px;
-        height: 32px;
-        flex-shrink: 0;
-        padding-right: 12px;
-        border-radius: 2px;
-        margin-right: 12px;
-      }
-
-      li {
-        list-style: none;
-      }
-
-      .category__sub {
-        line-height: normal;
-        margin-bottom: 12px;
-      }
-
-      .category__list {
-        font-size: 0;
-        position: relative;
-
-
-        .category__list__item {
-          display: inline-block;
-          margin-right: 40px;
-          cursor: pointer;
-          font-size: 16px;
-          line-height: 22px;
-          color: #606266;
-        }
-
-        .category__sub__item {
-          font-size: 14px;
-          line-height: 32px;
-          margin-bottom: 2px;
-          color: #0c0d0f;
-          padding: 0 12px;
-          border-radius: 2px;
-          margin-right: 12px;
-        }
-
-        .active {
-          background-color: rgba(0, 0, 0, 0.04);
-          color: #fe3355;
-          font-weight: 500;
-        }
-      }
-
-      .category__list::-webkit-scrollbar {
-        display: none;
-      }
-    }
-  }
+  //.category-layout {
+  //  .category__line {
+  //    display: flex;
+  //    font-size: 14px;
+  //
+  //    .category__first-ele {
+  //      line-height: 32px;
+  //      height: 32px;
+  //      flex-shrink: 0;
+  //      padding-right: 12px;
+  //      border-radius: 2px;
+  //      margin-right: 12px;
+  //    }
+  //
+  //    li {
+  //      list-style: none;
+  //    }
+  //
+  //    .category__sub {
+  //      line-height: normal;
+  //      margin-bottom: 12px;
+  //    }
+  //
+  //    .category__list {
+  //      font-size: 0;
+  //      position: relative;
+  //
+  //
+  //      .category__list__item {
+  //        display: inline-block;
+  //        margin-right: 40px;
+  //        cursor: pointer;
+  //        font-size: 16px;
+  //        line-height: 22px;
+  //        color: #606266;
+  //      }
+  //
+  //      .category__sub__item {
+  //        font-size: 14px;
+  //        line-height: 32px;
+  //        margin-bottom: 2px;
+  //        color: #0c0d0f;
+  //        padding: 0 12px;
+  //        border-radius: 2px;
+  //        margin-right: 12px;
+  //      }
+  //
+  //      .active {
+  //        background-color: rgba(0, 0, 0, 0.04);
+  //        color: #fe3355;
+  //        font-weight: 500;
+  //      }
+  //    }
+  //
+  //    .category__list::-webkit-scrollbar {
+  //      display: none;
+  //    }
+  //  }
+  //}
 
 
   .page-wrap {
