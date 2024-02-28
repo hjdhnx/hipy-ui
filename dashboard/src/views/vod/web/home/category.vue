@@ -167,13 +167,14 @@ export default {
 
     .video-item {
       width: calc((100% - 3 * 16px) / 4);
+      height: calc((1920px - 5 * 16px) / 6);
       aspect-ratio: 3/5;
       min-height: 120px;
 
       .cover-wrap {
         position: relative;
         width: 100%;
-        height: 85%;
+        height: 100%;
 
         img {
           border-radius: 4px;

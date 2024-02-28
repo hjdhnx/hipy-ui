@@ -58,7 +58,7 @@
 
 <style rel="stylesheet/scss" lang="scss">
 	.menu-wrap {
-		margin-top: 64px;
+		margin-top: 1px;
 		padding: 20px 0 0;
 
 		.category__list {
