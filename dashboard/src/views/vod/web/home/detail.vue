@@ -2,8 +2,8 @@
   <div class="detail">
     <div class="player-wrap">
       <div class="left">
+        <video id="player-box" v-if="!playUrl"></video>
         <video-player
-          id="player-box"
           ref="videoPlayer"
           class="video-player vjs-custom-skin"
           :playsinline="false"
@@ -17,6 +17,7 @@
           @loadeddata="onPlayerLoadeddata($event)"
           @timeupdate="onPlayerTimeupdate($event)"
           @statechanged="playerStateChanged($event)"
+          v-if="playUrl"
         />
       </div>
       <div class="right" v-for="(tab_item, tab_index) in tData.playData" :key="tab_index">
@@ -78,6 +79,7 @@ export default {
       currentLink: '',
       currentTab: '',
       playedTime: 0,
+      playUrl: '', // 播放直链
       tData: {
         detailData: {},
         playData: [],
@@ -98,14 +100,18 @@ export default {
         aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值，值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
         fluid: true, // 当true时，Video.js player将拥有流体大小，换句话说，它将按比例缩放以适应其容器
         sources: [
+          // {
+          //   // type: "video/mp4", // 类型
+          //   // type: "video/MP2T", // 类型
+          //   // type: "application/x-mpegURL", // 类型
+          //   // src: require("./1.mp4"), // url地址，在使用本地的资源时，需要用require()引入，否则控制台会报错
+          //   // src: 'https://newcntv.qcloudcdn.com/asp/hls/2000/0303000a/3/default/ec43c5b995f24fe9a6101367a7148347/2000.m3u8', // url地址，在使用本地的资源时，需要用require()引入，否则控制台会报错
+          //   src: 'https://newcntv.qcloudcdn.com/asp/hls/2000/0303000a/3/default/ec43c5b995f24fe9a6101367a7148347/2000.m3u8', // url地址，在使用本地的资源时，需要用require()引入，否则控制台会报错
+          // },
           {
-            // type: "video/mp4", // 类型
-            // type: "video/MP2T", // 类型
-            // type: "application/x-mpegURL", // 类型
-            // src: require("./1.mp4"), // url地址，在使用本地的资源时，需要用require()引入，否则控制台会报错
-            // src: 'https://newcntv.qcloudcdn.com/asp/hls/2000/0303000a/3/default/ec43c5b995f24fe9a6101367a7148347/2000.m3u8', // url地址，在使用本地的资源时，需要用require()引入，否则控制台会报错
-            src: 'https://newcntv.qcloudcdn.com/asp/hls/2000/0303000a/3/default/ec43c5b995f24fe9a6101367a7148347/2000.m3u8', // url地址，在使用本地的资源时，需要用require()引入，否则控制台会报错
-          },
+            // src:"https://newcntv.qcloudcdn.com/asp/hls/2000/0303000a/3/default/ec43c5b995f24fe9a6101367a7148347/2000.m3u8"
+            src: ""
+          }
         ],
         // 设置封面地址
         poster: {
@@ -158,7 +164,10 @@ export default {
           $player.setAttribute('src', resp.url)
           $player.setAttribute('autoplay', true)
         }
-        this.playOptions.sources[0].src = resp.url
+        let playUrl = resp.url
+        this.playOptions.sources[0].src = playUrl
+
+        this.playUrl = playUrl
         // console.log(this.$refs.videoPlayer.player)
         // this.load()
       })
