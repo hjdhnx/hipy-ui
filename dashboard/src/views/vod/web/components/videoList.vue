@@ -43,6 +43,18 @@ export default {
 
 
 <style rel="stylesheet/scss" lang="scss">
+@media screen and (min-width: 1px) and (max-width: 768px) {
+  .video-item {
+    width: calc((100% - 2 * 16px) / 3) !important;
+    height: auto !important;
+  }
+
+  .category__list {
+    white-space: nowrap !important;
+    overflow-x: auto !important;
+  }
+}
+
 .lvideo-list {
   min-height: 200px;
   margin-top: 12px;

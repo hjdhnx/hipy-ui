@@ -88,6 +88,7 @@ export default {
 @media screen and (min-width: 1px) and (max-width: 768px) {
   .video-item {
     width: calc((100% - 2 * 16px) / 3) !important;
+    height: auto !important;
   }
 
   .category__list {
@@ -95,7 +96,6 @@ export default {
     overflow-x: auto !important;
   }
 }
-
 
 .layout-content {
   width: 100%;
