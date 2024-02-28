@@ -3,7 +3,7 @@
 
     <Filters :data="filterData" @filterSelected="handleFilterSelection" v-if="filterData"/>
 
-    <videoList :videos="vodDatas" />
+    <videoList :videos="vodDatas"/>
 
     <div class="page-wrap" v-if="num_pages > 1">
       <div class="page-item" :class="page === 1 ? 'disable' : ''" @click="handlePre()">上页</div>
@@ -20,7 +20,7 @@ import {CateGoryApi} from "@/api/vod/web";
 
 export default {
   name: 'VodWebCategory',
-  components: { Filters, videoList },
+  components: {Filters, videoList},
   data() {
     return {
       categoryId: '',
@@ -29,12 +29,12 @@ export default {
       num_pages: 0,
 
       vodDatas: [],
-      currentClass:{}//选中的筛选集合
+      currentClass: {}//选中的筛选集合
     }
   },
   created() {
     this.categoryId = this.$route.query.t;//路由设置参数，从路径中获取参数
-    console.log('this.categoryId:',this.categoryId)
+    console.log('this.categoryId:', this.categoryId)
     //this.filterData = this.$store.vod.filters;
     //this.categoryId = this.$route.params.vid;//路由设置参数，从路径中获取参数
 
@@ -44,8 +44,8 @@ export default {
   watch: {
     '$route.query.t': function () {
       this.categoryId = this.$route.query.t
-      console.log('this.categoryId:',this.categoryId)
-      this.currentClass={};
+      console.log('this.categoryId:', this.categoryId)
+      this.currentClass = {};
       this.getData();
     },
   },
@@ -57,14 +57,14 @@ export default {
       this.getData()
     },
     getData() {
-      this.filterData = this.categoryId?this.$store.state.vod.filters[this.categoryId]:null
-      console.log('hipy_sites from store:',this.$store.state.vod.hipy_sites)
+      this.filterData = this.categoryId ? this.$store.state.vod.filters[this.categoryId] : null
+      console.log('hipy_sites from store:', this.$store.state.vod.hipy_sites)
       //console.log('this.filterData:',this.filterData)
-      console.log('this.currentClass:',this.currentClass)
-      CateGoryApi(this.categoryId,this.page,this.currentClass).then((resp) => {
+      console.log('this.currentClass:', this.currentClass)
+      CateGoryApi(this.categoryId, this.page, this.currentClass).then((resp) => {
         //console.log("resp:",resp)
-         this.vodDatas = resp.list;
-         this.num_pages= resp.pagecount;
+        this.vodDatas = resp.list;
+        this.num_pages = resp.pagecount;
       })
     },
     handlePre() {
@@ -88,7 +88,6 @@ export default {
 @media screen and (min-width: 1px) and (max-width: 768px) {
   .video-item {
     width: calc((100% - 2 * 16px) / 3) !important;
-    height: auto !important;
   }
 
   .category__list {
@@ -96,6 +95,7 @@ export default {
     overflow-x: auto !important;
   }
 }
+
 
 .layout-content {
   width: 100%;
@@ -167,7 +167,6 @@ export default {
 
     .video-item {
       width: calc((100% - 3 * 16px) / 4);
-      height: calc((1920px - 5 * 16px) / 6);
       aspect-ratio: 3/5;
       min-height: 120px;
 
@@ -180,6 +179,7 @@ export default {
           border-radius: 4px;
           overflow: hidden;
           // todo 修改默认图
+          //background: url(../images/load.gif) no-repeat;
           background-color: #e6f2f5;
           width: 100%;
           height: 100%;
@@ -198,7 +198,7 @@ export default {
           background-color: green;
           text-overflow: ellipsis;
           overflow: hidden;
-        //  text-wrap: nowrap;
+          //  text-wrap: nowrap;
           border-top-right-radius: 5px;
           border-bottom-right-radius: 5px;
         }
@@ -212,6 +212,10 @@ export default {
           white-space: nowrap;
         }
 
+        .info {
+          display: none;
+        }
+
       }
 
     }
@@ -222,10 +226,8 @@ export default {
     display: flex;
     flex-direction: row;
     gap: 16px;
-    justify-content: center;
-    /* 水平居中 */
-    align-items: center;
-    /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
 
     .page-item {
       user-select: none;

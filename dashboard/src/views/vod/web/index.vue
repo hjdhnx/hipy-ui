@@ -15,8 +15,10 @@ import Footer from '@/views/vod/web/components/footer.vue'
 import Menu from '@/views/vod/web/components/menu.vue'
 
 import {
-  HomeApi,ConfigApi
+  HomeApi, ConfigApi, now_site
 } from "@/api/vod/web";
+
+import cache from "@/plugins/cache"
 
 export default {
   name: 'VodWeb',
@@ -28,12 +30,12 @@ export default {
   },
   created() {
     this.getConfig();
-    this.getData();
+    // this.getData();
     console.log('filters:', this.getItem('filters'));
   },
   methods: {
-    goHome(){
-      if(this.$route.name === 'VodWeb'){
+    goHome() {
+      if (this.$route.name === 'VodWeb') {
         console.log('自动跳转到分类页的首页')
         this.$router.push({
           path: '/vod/web/category',
@@ -50,16 +52,26 @@ export default {
         this.goHome();
       })
     },
-    getConfig(){
+    getConfig() {
       ConfigApi().then((resp) => {
         let config = resp;
-        console.log('config:',config)
-        if(config.sites){
-          console.log('get config cost:',config.cost_time)
-          let hipy_sites = config.sites.filter(it=>it.key.startsWith('hipy_t4'))
-          console.log('hipy_sites from config:',hipy_sites)
+        console.log('config:', config)
+        if (config.sites) {
+          console.log('get config cost:', config.cost_time)
+          let hipy_sites = config.sites.filter(it => it.key.startsWith('hipy_t4'))
+          console.log('hipy_sites from config:', hipy_sites)
           this.setItem('hipy_sites', hipy_sites);
+          let cacheSite = cache.local.getJSON('hipy_site');
+          if (!cacheSite && hipy_sites.length > 0) {//设置首页源
+            cacheSite = hipy_sites[0]
+            cache.local.setJSON('hipy_site', cacheSite);
+            now_site.api_url = cacheSite.api
+            now_site.extend = cacheSite.ext
+            console.log('now_site:', now_site)
+            console.log('cacheSite:', cacheSite)
+          }
         }
+        this.getData()
       })
     },
     setItem(key, value) {

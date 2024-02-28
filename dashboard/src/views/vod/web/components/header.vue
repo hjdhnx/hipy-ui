@@ -38,7 +38,8 @@
         </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleConfirmChange">确认</el-button>
+        <el-button type="danger" @click="handleConfirmClear">清除缓存</el-button>
+        <el-button type="primary" @click="handleConfirmChange">确认换源</el-button>
       </div>
 
     </el-dialog>
@@ -94,6 +95,8 @@ export default {
       this.form.new_site = this.form.now_site
       if (!this.form.new_site.key && this.form.sites.length > 0) {
         this.form.new_site = this.form.sites[0]
+      } else if (this.form.new_site.key && !this.form.sites.map(i => i.key).includes(this.form.new_site.key)) {
+        this.form.new_site = this.form.sites[0]
       }
     },
     handleChangeRule(rule) {// 临时换源
@@ -104,6 +107,17 @@ export default {
       this.open = false
       cache.local.setJSON('hipy_site', this.form.now_site)
       location.href = '/vod/web/'
+    },
+    handleConfirmClear() {//清除缓存
+      this.$confirm('确认清除缓存？这将会重置已选首页源为配置里的第一个源')
+        .then(_ => {
+          cache.local.remove('hipy_site')
+          this.open = false
+          // 清除缓存自动处理换源的缓存接口问题
+          location.href = '/vod/web/'
+        })
+        .catch(_ => {
+        });
     }
   },
 }

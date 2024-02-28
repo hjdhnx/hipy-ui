@@ -4,16 +4,18 @@ import cache from "@/plugins/cache"
 
 const config_url = new URL(process.env.VUE_APP_BASE_API).origin + '/config/0'
 
-
-const now_site = {
-  api_url:process.env.VUE_APP_BASE_API + 'vod/cntv%E5%A4%AE%E8%A7%86?pwd=dzyyds',
-  extend:new URL(process.env.VUE_APP_BASE_API).origin + '/files/hipy/cntv央视.json'
+export const now_site = {
+  api_url: process.env.VUE_APP_BASE_API + 'vod/cntv%E5%A4%AE%E8%A7%86?pwd=dzyyds',
+  extend: new URL(process.env.VUE_APP_BASE_API).origin + '/files/hipy/cntv央视.json'
 }
-let cacheSite = cache.local.getJSON('hipy_site');
-if (cacheSite) {//读取缓存
-  console.log('当前存在缓存首页源:',cacheSite.name)
-  now_site.api_url = cacheSite.api
-  now_site.extend = cacheSite.extend
+
+function get_now_site(){
+  let cacheSite = cache.local.getJSON('hipy_site');
+  if (cacheSite) {//读取缓存
+    console.log('当前存在缓存首页源:', cacheSite.name)
+    now_site.api_url = cacheSite.api
+    now_site.extend = cacheSite.ext
+  }
 }
 
 /**
@@ -22,12 +24,12 @@ if (cacheSite) {//读取缓存
  * @constructor
  */
 export function ConfigApi() {
+  get_now_site()
   return request({
     url: config_url,
     responseType: 'json',
     method: 'get',
-    params: {
-    }
+    params: {}
   })
 }
 

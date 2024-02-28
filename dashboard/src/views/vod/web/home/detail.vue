@@ -21,7 +21,8 @@
         />
       </div>
       <div class="right" v-for="(tab_item, tab_index) in tData.playData" :key="tab_index">
-        <h3>{{ tData.tabList[tab_index] }}|<span class="tab_count">{{ tData.tabCount }}</span></h3>
+        <h3 @click="handleCopyUrl">{{ tData.tabList[tab_index] }}|<span class="tab_count">{{ tData.tabCount }}</span>
+        </h3>
         <div class="p-list">
           <div class="p-item" :class="currentLink===item.link? 'active':''" v-for="item in tab_item"
                @click="startPlay(item.link,tData.tabList[tab_index])">{{ item.label }}
@@ -70,6 +71,7 @@
 import Header from '@/views/vod/web/components/header.vue'
 import LogoImg from '@/assets/images/logo.png'
 import {DetailApi, PlayApi} from "@/api/vod/web";
+import {delRecord} from "@/api/hiker/developer";
 
 export default {
   name: 'VodWebDetail',
@@ -151,6 +153,23 @@ export default {
     handleDetail(vod_id) {
       return '/detail/' + vod_id
     },
+    handleCopyUrl() {
+      let self = this;
+      this.$confirm('是否复制当前播放视频地址:\n' + this.playUrl, '询问', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function () {
+        return self.$copyText(self.playUrl)
+      }).then((e) => {
+        this.$message({
+          message: '已复制到剪切板\n' + e.text,
+          type: 'success'
+        });
+      }).catch((e) => {
+        // this.$message.error('链接地址复制失败:'+e.message);
+      });
+    },
     startPlay(url, flag) {
       console.log('url:', url, ' flag:', flag)
       if (this.currentLink !== url) { // 切换视频清空播放进度
@@ -167,6 +186,11 @@ export default {
         }
         let playUrl = resp.url
         this.playOptions.sources[0].src = playUrl
+        if (playUrl.endsWith('.mp4')) {
+          this.playOptions.sources[0].type = "video/mp4"
+        } else {
+          this.playOptions.sources[0].type = undefined
+        }
 
         this.playUrl = playUrl
         // console.log(this.$refs.videoPlayer.player)
