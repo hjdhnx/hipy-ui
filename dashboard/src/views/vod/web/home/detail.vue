@@ -21,7 +21,7 @@
         />
       </div>
       <div class="right" v-for="(tab_item, tab_index) in tData.playData" :key="tab_index">
-        <h3>{{ tData.tabList[tab_index] }}</h3>
+        <h3>{{ tData.tabList[tab_index] }}|<span class="tab_count">{{ tData.tabCount }}</span></h3>
         <div class="p-list">
           <div class="p-item" :class="currentLink===item.link? 'active':''" v-for="item in tab_item"
                @click="startPlay(item.link,tData.tabList[tab_index])">{{ item.label }}
@@ -84,6 +84,7 @@ export default {
         detailData: {},
         playData: [],
         tabList: [],
+        tabCount: 0,
         recommendData: []
       },
       vod_id: '',
@@ -224,6 +225,7 @@ export default {
           })
           this.tData.playData = playData
           this.tData.tabList = tabList
+          this.tData.tabCount = tabList.length
           this.startPlay(playData[0][0].link, tabList[0])
           // 获取推荐
           // getRecommendData()
@@ -331,6 +333,11 @@ export default {
   width: 2em;
   line-height: 2em;
   border-radius: 1em;
+}
+
+.tab_count {
+  color: gray;
+  font-size: medium;
 }
 
 @media screen and (min-width: 1px) and (max-width: 768px) {

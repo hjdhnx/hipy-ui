@@ -1,8 +1,35 @@
 import request from '@/utils/request'
 import {base64Encode, base64Decode} from "@/utils/jsencrypt";
+import cache from "@/plugins/cache"
 
-const api_url = process.env.VUE_APP_BASE_API + 'vod/cntv%E5%A4%AE%E8%A7%86?pwd=dzyyds'
-const extend = new URL(process.env.VUE_APP_BASE_API).origin + '/files/hipy/cntv央视.json'
+const config_url = new URL(process.env.VUE_APP_BASE_API).origin + '/config/0'
+
+
+const now_site = {
+  api_url:process.env.VUE_APP_BASE_API + 'vod/cntv%E5%A4%AE%E8%A7%86?pwd=dzyyds',
+  extend:new URL(process.env.VUE_APP_BASE_API).origin + '/files/hipy/cntv央视.json'
+}
+let cacheSite = cache.local.getJSON('hipy_site');
+if (cacheSite) {//读取缓存
+  console.log('当前存在缓存首页源:',cacheSite.name)
+  now_site.api_url = cacheSite.api
+  now_site.extend = cacheSite.extend
+}
+
+/**
+ * 配置接口,返回tvbox配置数据
+ * @returns {*}
+ * @constructor
+ */
+export function ConfigApi() {
+  return request({
+    url: config_url,
+    responseType: 'json',
+    method: 'get',
+    params: {
+    }
+  })
+}
 
 /**
  * 主页接口,返回首页推荐列表及分类数据
@@ -11,11 +38,11 @@ const extend = new URL(process.env.VUE_APP_BASE_API).origin + '/files/hipy/cntv�
  */
 export function HomeApi() {
   return request({
-    url: api_url,
+    url: now_site.api_url,
     responseType: 'json',
     method: 'get',
     params: {
-      extend: extend,
+      extend: now_site.extend,
       filter: true,
     }
   })
@@ -31,11 +58,11 @@ export function HomeApi() {
 export function SearchApi(wd, pg) {
   pg = pg || 1;
   return request({
-    url: api_url,
+    url: now_site.api_url,
     responseType: 'json',
     method: 'get',
     params: {
-      extend: extend,
+      extend: now_site.extend,
       wd: wd,
       pg: pg
     }
@@ -56,11 +83,11 @@ export function CateGoryApi(t, pg, filters) {
   filters = filters || {}
   let ext_filters = base64Encode(JSON.stringify(filters))
   return request({
-    url: api_url + '&ac=list',
+    url: now_site.api_url + '&ac=list',
     responseType: 'json',
     method: 'get',
     params: {
-      extend: extend,
+      extend: now_site.extend,
       filter: true,
       t: t,
       pg: pg,
@@ -78,11 +105,11 @@ export function CateGoryApi(t, pg, filters) {
  */
 export function DetailApi(ids) {
   return request({
-    url: api_url + '&ac=detail',
+    url: now_site.api_url + '&ac=detail',
     responseType: 'json',
     method: 'get',
     params: {
-      extend: extend,
+      extend: now_site.extend,
       ids: ids,
     }
   })
@@ -99,11 +126,11 @@ export function DetailApi(ids) {
 export function PlayApi(play, flag) {
   flag = flag || '';
   return request({
-    url: api_url,
+    url: now_site.api_url,
     responseType: 'json',
     method: 'get',
     params: {
-      extend: extend,
+      extend: now_site.extend,
       play: play,
       flag: flag,
     }

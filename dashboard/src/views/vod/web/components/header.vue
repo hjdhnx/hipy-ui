@@ -1,9 +1,9 @@
 <template>
   <header class="header-layout">
     <div class="header-wrap">
-      <a class="left-wrap" href="/">
+      <a class="left-wrap" @click="handleOpenForm">
         <img :src="LogoImg" class="logo"/>
-        <div class="title">{{title}}</div>
+        <div class="title">{{ title }}</div>
       </a>
       <div class="right-wrap">
         <div class="search-wrap">
@@ -25,30 +25,85 @@
         </div>
       </div>
     </div>
+
+    <!-- 换源对话框 -->
+    <el-dialog :title="form_title" :visible.sync="open" width="500px" append-to-body>
+      <el-form ref="form" :model="form" label-width="120px">
+        <div class="button-container">
+          <div class="btn-item" v-for="(site,index) in form.sites" :key="index">
+            <el-button :type="form.new_site.key===site.key? 'success':'primary'" size="medium"
+                       @click="handleChangeRule(site)">{{ site.name }}
+            </el-button>
+          </div>
+        </div>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleConfirmChange">确认</el-button>
+      </div>
+
+    </el-dialog>
+
   </header>
 </template>
 
 <script>
 import LogoImg from '@/assets/images/logo.png'
+import cache from "@/plugins/cache"
 
 export default {
   name: 'VodWebHeader',
   components: {},
-  data(){
+  data() {
     return {
+      // 弹出层标题
+      form_title: "",
+      // 是否显示弹出层
+      open: false,
+      // 表单参数
+      form: {sites: [], now_site: {}, new_site: {}},
       LogoImg,
-      keywordRef:'',
-      title:'hipy影视',
+      keywordRef: '',
+      title: 'hipy影视',
     }
   },
   created() {
+    this.getCache()
   },
-  methods:{
-    handleSearch(){
+  methods: {
+    handleSearch() {
       console.log(this.keywordRef)
-      if(this.keywordRef !== ''){
-        this.$router.push({path: '/vod/web/search', query:{keyword: this.keywordRef}})
+      if (this.keywordRef !== '') {
+        this.$router.push({path: '/vod/web/search', query: {keyword: this.keywordRef}})
       }
+    },
+    handleOpenForm() {
+      this.open = true
+      this.form_title = '请选择数据源'
+      this.getData()
+    },
+    getCache() {
+      let cacheSite = cache.local.getJSON('hipy_site');
+      if (cacheSite) {
+        this.form.now_site = cacheSite
+        this.title = cacheSite.name
+      }
+    },
+    getData() {
+      console.log('header组件-hipy_sites from store:', this.$store.state.vod.hipy_sites)
+      this.form.sites = this.$store.state.vod.hipy_sites
+      this.form.new_site = this.form.now_site
+      if (!this.form.new_site.key && this.form.sites.length > 0) {
+        this.form.new_site = this.form.sites[0]
+      }
+    },
+    handleChangeRule(rule) {// 临时换源
+      this.form.new_site = rule
+    },
+    handleConfirmChange() {//确认换源
+      this.form.now_site = this.form.new_site
+      this.open = false
+      cache.local.setJSON('hipy_site', this.form.now_site)
+      location.href = '/vod/web/'
     }
   },
 }
@@ -56,6 +111,31 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
+.button-container {
+  width: 100%;
+  overflow: hidden;
+  padding: 2px 2px;
+  display: flex;
+  flex-wrap: wrap;
+
+  .btn-item {
+    text-align: center;
+    //width:calc(20% - 30px);
+    width: calc(33.3%);
+    padding: 2px 2px 2px 2px;
+    //margin-bottom:5px;
+    //margin-left: 10px;
+    //margin-right: 10px;
+    &:nth-child(8) {
+      margin-right: 0;
+    }
+
+    button {
+      width: 95%;
+    }
+  }
+}
+
 .header-layout {
   background-color: white;
   max-width: 1024px;
@@ -89,23 +169,25 @@ export default {
         width: 35px;
         height: 31px;
       }
+
       .title {
         display: inline-block;
         line-height: 31px;
         margin-left: 10px;
         font-size: 16px;
         font-weight: 700;
-        text-shadow: 0 4px 8px rgba(216,30,6,0.3);  /*设置文字阴影*/
+        text-shadow: 0 4px 8px rgba(216, 30, 6, 0.3); /*设置文字阴影*/
         user-select: none;
       }
     }
-    .left-wrap:hover{
+
+    .left-wrap:hover {
       color: #0c0d0f;
-      text-shadow: 0 4px 8px rgba(0,0,0,0.6);  /*设置文字阴影*/
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); /*设置文字阴影*/
     }
 
     .right-wrap {
-      flex:1;
+      flex: 1;
       padding: 0 1px;
       display: flex;
 

@@ -15,7 +15,7 @@ import Footer from '@/views/vod/web/components/footer.vue'
 import Menu from '@/views/vod/web/components/menu.vue'
 
 import {
-  HomeApi
+  HomeApi,ConfigApi
 } from "@/api/vod/web";
 
 export default {
@@ -27,6 +27,7 @@ export default {
     }
   },
   created() {
+    this.getConfig();
     this.getData();
     console.log('filters:', this.getItem('filters'));
   },
@@ -47,6 +48,18 @@ export default {
         this.setItem('filters', resp.filters);
         this.setItem('recommend', resp.list);
         this.goHome();
+      })
+    },
+    getConfig(){
+      ConfigApi().then((resp) => {
+        let config = resp;
+        console.log('config:',config)
+        if(config.sites){
+          console.log('get config cost:',config.cost_time)
+          let hipy_sites = config.sites.filter(it=>it.key.startsWith('hipy_t4'))
+          console.log('hipy_sites from config:',hipy_sites)
+          this.setItem('hipy_sites', hipy_sites);
+        }
       })
     },
     setItem(key, value) {
