@@ -1,36 +1,30 @@
-# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
-# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
-
-name: Node.js Package
-
+name: DeployServer
+# on 表示触发actions的条件
 on:
-  release:
-    types: [created]
-
+    push:
+        branches: [main] #main分支在push的时候会触发
+    pull_request:
+        branches: [main] #main分支在PR的时候会触发
+ 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16
-      - run: npm ci
-      - run: npm test
-
-  publish-gpr:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16
-          registry-url: https://npm.pkg.github.com/
-      - run: npm ci
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    build:
+        runs-on: ubuntu-latest #nodejs执行的操作系统
+ 
+        steps:
+            - uses: actions/checkout@v3 #拉取你的最新代码
+            - name: Use Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "18.19.0"  # 指定你的node版本
+            - run: npm install
+            - run: npm run build:stage
+            - name: TranslateFile
+              # uses: wangyucode/sftp-upload-action@24f8bb83383dc39bed201ee5da01475e6c38c568
+              uses: wangyucode/sftp-upload-action@v1.1
+              with:
+                  host: ${{ secrets.SERVER_IP }} #你的nginx服务器公网ip
+                  port: ${{ secrets.SERVER_PORT }} #你的nginx服务器ssh端口
+                  username: ${{ secrets.USERNAME }} #你的nginx服务器用户名
+                  password: ${{ secrets.PASSWORD }} #你的nginx服务器密码
+                  localDir: "dist" #你vue项目build好的文件的路径,每次服务器上会自动删除对应的文件夹后重新覆盖
+                  remoteDir: ${{ secrets.SERVER_DESTINATION }} #你要把你build好的文件夹放到nginx服务器上的什么位置，一般都是nginx配置的站点路径
