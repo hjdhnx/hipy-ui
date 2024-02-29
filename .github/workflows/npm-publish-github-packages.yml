@@ -17,14 +17,14 @@ jobs:
               with:
                   node-version: "18.19.0"  # 指定你的node版本
             - run: npm install
-            - run: npm run build:stage
+            - run: npm run build:prod
             - name: TranslateFile
               # uses: wangyucode/sftp-upload-action@24f8bb83383dc39bed201ee5da01475e6c38c568
               uses: wangyucode/sftp-upload-action@v1.1
               with:
-                  host: ${{ secrets.SERVER_IP }} #你的nginx服务器公网ip
-                  port: ${{ secrets.SERVER_PORT }} #你的nginx服务器ssh端口
-                  username: ${{ secrets.USERNAME }} #你的nginx服务器用户名
-                  password: ${{ secrets.PASSWORD }} #你的nginx服务器密码
+                  host: ${{host}} #你的nginx服务器公网ip
+                  port: ${{port}} #你的nginx服务器ssh端口
+                  username: ${{user}} #你的nginx服务器用户名
+                  password: ${{psw}} #你的nginx服务器密码
                   localDir: "dist" #你vue项目build好的文件的路径,每次服务器上会自动删除对应的文件夹后重新覆盖
-                  remoteDir: ${{ secrets.SERVER_DESTINATION }} #你要把你build好的文件夹放到nginx服务器上的什么位置，一般都是nginx配置的站点路径
+                  remoteDir: ${{document}} #你要把你build好的文件夹放到nginx服务器上的什么位置，一般都是nginx配置的站点路径
