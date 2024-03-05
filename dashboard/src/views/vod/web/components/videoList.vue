@@ -1,12 +1,16 @@
 <template>
-  <div class="lvideo-list">
-    <a class="video-item" @click="handleDetail(item.vod_id)" v-for="item in videoDatas">
-      <div class="cover-wrap">
-        <img :src="item.vod_pic" />
-        <span v-if="item.vod_remarks" class="remarks">{{ item.vod_remarks }}</span>
-        <div class="title">{{ item.vod_name }}</div>
+  <div class="content-container">
+    <div class="content-wrapper">
+      <div class="container-flow-wrap">
+        <a v-for="item in videoDatas" :key="item.vod_id" class="video-item" @click="handleDetail(item.vod_id)">
+          <div class="cover-wrap">
+            <img :src="item.vod_pic">
+            <span v-if="item.vod_remarks" class="remarks">{{ item.vod_remarks }}</span>
+            <div class="title">{{ item.vod_name }}</div>
+          </div>
+        </a>
       </div>
-    </a>
+    </div>
   </div>
 </template>
 
@@ -20,12 +24,12 @@ export default {
   },
   data() {
     return {
-      videoDatas: [],
+      videoDatas: []
     }
   },
   watch: {
     videos(news) {
-      this.videoDatas = news;
+      this.videoDatas = news
     }
   },
   methods: {
@@ -35,15 +39,17 @@ export default {
         query: {
           ids: vod_id
         }
-      });
-    },
-  },
+      })
+    }
+  }
 }
 </script>
 
-
-<style rel="stylesheet/scss" lang="scss">
-@media screen and (min-width: 1px) and (max-width: 768px) {
+<style lang="scss" scoped>
+@media screen and (min-width: 1px) and (max-width: 932px) {
+  .container-flow-wrap {
+    gap: 14px !important;
+  }
   .video-item {
     width: calc((100% - 2 * 16px) / 3) !important;
     height: auto !important;
@@ -55,79 +61,76 @@ export default {
   }
 }
 
-.lvideo-list {
-  min-height: 200px;
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-
-  .video-item {
-    width: calc((100% - 3 * 16px) / 4);
-    height: calc((1920px - 5 * 16px) / 6);
-    aspect-ratio: 3/5;
-    min-height: 120px;
-
-    .cover-wrap {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      //display: inline-block;
-      /* Display as inline block to auto adjust width */
-
-      img {
+.content-container {
+  width: 100%;
+  height: 100%;
+  .content-wrapper {
+    padding: 0 15px;
+    overflow-y: auto;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    flex-grow: 1;
+    .container-flow-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 28px;
+      .video-item {
+        // width: calc((100% - 3 * 16px) / 3);
+        height: calc((1920px - 5 * 16px) / 6);
+        aspect-ratio: 3/5;
+        min-height: 120px;
+        background-color: #000;
+        border-radius: 5px;
         overflow: hidden;
-        background-color: #e6f2f5;
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        object-fit: cover;
-      }
+        .cover-wrap {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          img {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            object-fit: cover;
+          }
 
-      .remarks {
-        position: relative;
-        top: auto;
-        right: 4px;
-        bottom: 66px;
-        color: #fff;
-        font-size: 12px;
-        padding: 10px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        border-top-right-radius: 15px;
-      }
+          .remarks {
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-radius: 0 5px 0 5px;
+            color: #fff;
+            font-size: 12px;
+            padding: 1px 6px;
+            height: 18px;
+            line-height: 18px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            background: #22c045;
+          }
 
-      .remarks1111 {
-        position: absolute;
-        top: 75%;
-        left: 0;
-        bottom: 30px;
-        color: white;
-        text-align: left;
-        font-size: 14px;
-        white-space: nowrap;
-        background-color: green;
-        border-top-right-radius: 5px;
+          .title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background-image: linear-gradient(180deg, transparent, rgba(0, 0, 0, .1) 30%, rgba(0, 0, 0, .5));
+            background-color: #141619;
+            padding: 0 8px;
+            color: #fff;
+            font-weight: 500;
+            padding: 5px;
+            text-align: center;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+          }
+        }
       }
-
-      .title {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background-color: rgba(0, 0, 0, 0.6);
-        /* Semi-transparent black background */
-        color: white;
-        padding: 5px;
-        text-align: center;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        /* Prevent line breaks */
-      }
-
     }
-
   }
 }
 </style>

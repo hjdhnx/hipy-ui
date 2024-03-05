@@ -1,10 +1,15 @@
 <template>
   <div class="category-layout">
-    <div class="category__line" v-for="class_item in data" :key="class_item.name">
+    <div v-for="class_item in data" class="category__line" :key="class_item.name">
       <li class="category__first-ele">{{ class_item.name }}</li>
       <ul class="category__list category__sub">
-        <li class="category__list__item category__sub__item" :class="f[class_item.key] === item.v ? 'active' : ''"
-          @click="handleClickClass(class_item.key, item.v)" v-for="item in class_item.value" :key="item.v">{{ item.n }}
+        <li
+          v-for="item in class_item.value"
+          :key="item.v"
+          class="category__list__item category__sub__item"
+          :class="f[class_item.key] === item.v ? 'active' : ''"
+          @click="handleClickClass(class_item.key, item.v)"
+        >{{ item.n }}
         </li>
       </ul>
     </div>

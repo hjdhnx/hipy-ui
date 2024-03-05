@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <div class="portal">
-      <Header/>
-      <Menu :category="category"/>
-      <router-view/>
+  <div class="preview-container">
+    <Header />
+    <div class="preview-content">
+      <Menu :category="category" />
+      <router-view class="content" />
     </div>
-    <Footer/>
+    <Footer />
   </div>
 </template>
 
@@ -85,20 +85,19 @@ export default {
   },
 }
 
-
 </script>
 
-
-<style rel="stylesheet/scss" lang="scss">
-.portal {
-  width: 100%;
-  max-width: 1024px;
-  min-height: calc(100vh - 180px);
-  margin: 0 auto;
-  padding: 0 10px 16px;
-}
-
-body {
-  font-family: -apple-system, system-ui, BlinkMacSystemFont, Segoe UI, Helvetica Neue, PingFang SC, Helvetica, Microsoft Yahei, Arial, sans-serif;
+<style lang="scss" scoped>
+.preview-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .preview-content {
+    width: 100%;
+    height: calc(100% - 72px - 100px);
+    .content {
+      height: calc(100% - 57px);
+    }
+  }
 }
 </style>

@@ -1,34 +1,32 @@
 <template>
   <div class="user-page">
     <div class="user-page-form">
-<!--      <h3 class="title">{{ title }}</h3>-->
-      <slot></slot>
+      <!--  <h3 class="title">{{ title }}</h3>  -->
+      <slot />
     </div>
     <!--  底部  -->
-    <div class="el-user-page-footer">
-
-    </div>
+    <div class="el-user-page-footer" />
   </div>
 </template>
 
 <script>
 
 export default {
-  name: "UserLayout",
+  name: 'UserLayout',
   data() {
     return {
-      title: process.env.VUE_APP_TITLE || "",
-    };
-  },
-};
+      title: process.env.VUE_APP_TITLE || ''
+    }
+  }
+}
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
+<style lang="scss" scoped>
 .user-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 100vh;
   background-size: cover;
   background-image: url("../../assets/images/login-background.jpg");
 }

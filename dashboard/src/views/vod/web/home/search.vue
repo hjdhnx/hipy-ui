@@ -79,7 +79,6 @@ export default {
 <style rel="stylesheet/scss" lang="scss">
 .layout-content {
   width: 100%;
-  padding: 1px 0px;
 
   //.category-layout {
   //  .category__line {
