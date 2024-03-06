@@ -96,8 +96,16 @@ export default {
     width: 100%;
     height: calc(100% - 72px - 100px);
     .content {
-      height: calc(100% - 57px);
+      min-height: calc(100% - 53px);
+      max-height: calc(100% - 42px);
+      height: 100%;
     }
+  }
+}
+
+@media screen and (min-width: 1px) and (max-width: 932px) {
+  .content {
+    height: calc(100% - 42px) !important;
   }
 }
 </style>

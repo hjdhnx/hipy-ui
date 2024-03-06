@@ -127,16 +127,11 @@ export default {
 
   .btn-item {
     text-align: center;
-    //width:calc(20% - 30px);
     width: calc(33.3%);
     padding: 2px 2px 2px 2px;
-    //margin-bottom:5px;
-    //margin-left: 10px;
-    //margin-right: 10px;
     &:nth-child(8) {
       margin-right: 0;
     }
-
     button {
       width: 95%;
     }

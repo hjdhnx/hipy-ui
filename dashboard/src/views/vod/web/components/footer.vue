@@ -8,11 +8,10 @@
       <a href="/" class="foot-link" target="_blank">网站地图</a>
     </div>
     <div class="footer-infos">
-      <span>
-        <a style="color: #828a92;padding: 0 20px;">本网站只提供web页面服务, 通过链接的方式提供相关内容(所有视频内容收集于各大视频网站), 本站不对链接内容具有进行编辑、整理、修改等权利。如有问题, 请反馈E-mail: kefu009#gmail.com</a>
-      </span>
+      <span>本网站只提供web页面服务, 通过链接的方式提供相关内容(所有视频内容收集于各大视频网站), 本站不对链接内容具有进行编辑、整理、修改等权利。</span>
+      <a href="mailto:kefu009@gmail.com">如有问题, 请反馈E-mail: kefu009@gmail.com</a>
     </div>
-    <div class="address">2022-2023 © 火星代码工作室 · All Rights Reserved</div>
+    <div class="address">Copyright 2024 HiPy Team,All Rights Reserved.</div>
   </div>
 </template>
 
