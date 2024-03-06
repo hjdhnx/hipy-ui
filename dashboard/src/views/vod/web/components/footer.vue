@@ -2,17 +2,16 @@
   <div class="footer-view">
     <div class="foot-link-box flex-view">
       <a href="/" class="foot-link" target="_blank">在线留言</a>
-      <div class="link-split"></div>
+      <div class="link-split" />
       <a href="/" class="foot-link" target="_blank">排行榜</a>
-      <div class="link-split"></div>
+      <div class="link-split" />
       <a href="/" class="foot-link" target="_blank">网站地图</a>
     </div>
     <div class="footer-infos">
-      <span>
-        <a style="color: #828a92;padding: 0 20px;">本网站只提供web页面服务，通过链接的方式提供相关内容（所有视频内容收集于各大视频网站），本站不对链接内容具有进行编辑、整理、修改等权利。如有问题，请反馈E-mail: kefu009#gmail.com</a>
-      </span>
+      <span>本网站只提供web页面服务, 通过链接的方式提供相关内容(所有视频内容收集于各大视频网站), 本站不对链接内容具有进行编辑、整理、修改等权利。</span>
+      <a href="mailto:kefu009@gmail.com">如有问题, 请反馈E-mail: kefu009@gmail.com</a>
     </div>
-    <div class="address">2022-2023 © 火星代码工作室 · All Rights Reserved</div>
+    <div class="address">Copyright 2024 HiPy Team,All Rights Reserved.</div>
   </div>
 </template>
 
@@ -26,30 +25,27 @@ export default {
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
-.flex-view {
-  display: -webkit-box;
-  display: -ms-flexbox;
+<style lang="scss">
+.footer-view {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 99;
+  background-color: #2a2a32;
+  width: 100%;
+  height: 100px;
+  padding: 10px 0;
 }
 
 .footer-view {
-  width: 100%;
-  margin: 0 auto;
-  padding: 24px 0 20px 0px;
-  background-color: #2a2a32;
-
+  position: absolute;
+  bottom: 0;
+  left: 0;
   .foot-link-box {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
     overflow: hidden;
-    margin: 24px auto 16px;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
     justify-content: center;
 
     .foot-link {
