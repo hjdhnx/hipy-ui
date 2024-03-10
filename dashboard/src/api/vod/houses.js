@@ -16,7 +16,8 @@ export function listHouses(query) {
 export function addHouses(id) {
   return request({
     url: api_url + "/" + id,
-    method: 'put'
+    method: 'put',
+    timeout: 60*1000
   })
 }
 
@@ -24,6 +25,7 @@ export function addHouses(id) {
 export function refreshHouses() {
   return request({
     url: api_url + '/refresh',
-    method: 'post'
+    method: 'post',
+    timeout: 60*1000
   })
 }

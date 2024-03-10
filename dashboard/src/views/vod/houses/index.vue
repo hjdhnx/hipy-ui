@@ -206,27 +206,35 @@ export default {
     },
     /** 刷新源列表按钮操作 */
     handleRefresh(row) {
+      let self = this;
       this.$modal.confirm('从源仓库获取一些drpy源的更新信息？').then(function () {
+        self.$modal.loading("数据获取中，请稍候...");
         return refreshHouses();
       }).then(() => {
+        self.$modal.closeLoading();
         this.getList();
         this.$modal.msgSuccess("初始化成功");
       }).catch(() => {
+        self.$modal.closeLoading();
       });
     },
     /** 导入按钮操作 */
     handleImport(row) {
       const ids = row.id || this.ids
+      let self = this;
       this.$confirm('是否确认安装编号为"' + ids + '"等' + (ids.length || 1) + '个源?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function () {
+        self.$modal.loading("数据获取中，请稍候...");
         return addHouses(ids)
       }).then((resp) => {
+        self.$modal.closeLoading();
         this.getList()
         this.msgSuccess(resp.data)
       }).catch(function () {
+        self.$modal.closeLoading();
       })
     }
   }

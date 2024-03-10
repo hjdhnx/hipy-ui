@@ -67,7 +67,8 @@ export function saveRecordContent(id, content) {
 export function refreshRules() {
   return request({
     url: api_url + '/refresh',
-    method: 'post'
+    method: 'post',
+    timeout: 60*1000
   })
 }
 

@@ -722,12 +722,16 @@ export default {
     },
     /** 刷新源列表按钮操作 */
     handleRefresh(row) {
+      let self = this;
       this.$modal.confirm('是否确认刷新本地所有源？').then(function () {
+        self.$modal.loading("数据获取中，请稍候...");
         return refreshRules();
       }).then(() => {
+        self.$modal.closeLoading();
         this.getList();
         this.$modal.msgSuccess("刷新成功");
       }).catch(() => {
+        self.$modal.closeLoading();
       });
     },
     /** 清空按钮操作 */
