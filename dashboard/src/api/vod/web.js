@@ -43,6 +43,7 @@ export function HomeApi() {
     url: now_site.api_url,
     responseType: 'json',
     method: 'get',
+    timeout: 10*1000,
     params: {
       extend: now_site.extend,
       filter: true,
@@ -63,6 +64,7 @@ export function SearchApi(wd, pg) {
     url: now_site.api_url,
     responseType: 'json',
     method: 'get',
+    timeout: 10*1000,
     params: {
       extend: now_site.extend,
       wd: wd,
@@ -88,6 +90,7 @@ export function CateGoryApi(t, pg, filters) {
     url: now_site.api_url + '&ac=list',
     responseType: 'json',
     method: 'get',
+    timeout: 10*1000,
     params: {
       extend: now_site.extend,
       filter: true,
@@ -110,6 +113,7 @@ export function DetailApi(ids) {
     url: now_site.api_url + '&ac=detail',
     responseType: 'json',
     method: 'get',
+    timeout: 10*1000,
     params: {
       extend: now_site.extend,
       ids: ids,
@@ -131,6 +135,7 @@ export function PlayApi(play, flag) {
     url: now_site.api_url,
     responseType: 'json',
     method: 'get',
+    timeout: 10*1000,
     params: {
       extend: now_site.extend,
       play: play,
