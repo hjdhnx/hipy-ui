@@ -27,24 +27,25 @@
       <br>
       <el-row>
         <el-col :lg="2" :md="2">
-          <el-upload action="#" accept=".jpg,.png,.jpeg,.ico,.gif,.svg,.tiff" :http-request="requestUpload" :show-file-list="false" :before-upload="beforeUpload">
+          <el-upload action="#" accept=".jpg,.png,.jpeg,.ico,.gif,.svg,.tiff" :http-request="requestUpload"
+                     :show-file-list="false" :before-upload="beforeUpload">
             <el-button size="small">
               选择
-              <i class="el-icon-upload el-icon--right" />
+              <i class="el-icon-upload el-icon--right"/>
             </el-button>
           </el-upload>
         </el-col>
         <el-col :lg="{span: 1, offset: 2}" :md="2">
-          <el-button icon="el-icon-plus" size="small" @click="changeScale(1)" />
+          <el-button icon="el-icon-plus" size="small" @click="changeScale(1)"/>
         </el-col>
         <el-col :lg="{span: 1, offset: 1}" :md="2">
-          <el-button icon="el-icon-minus" size="small" @click="changeScale(-1)" />
+          <el-button icon="el-icon-minus" size="small" @click="changeScale(-1)"/>
         </el-col>
         <el-col :lg="{span: 1, offset: 1}" :md="2">
-          <el-button icon="el-icon-refresh-left" size="small" @click="rotateLeft()" />
+          <el-button icon="el-icon-refresh-left" size="small" @click="rotateLeft()"/>
         </el-col>
         <el-col :lg="{span: 1, offset: 1}" :md="2">
-          <el-button icon="el-icon-refresh-right" size="small" @click="rotateRight()" />
+          <el-button icon="el-icon-refresh-right" size="small" @click="rotateRight()"/>
         </el-col>
         <el-col :lg="{span: 2, offset: 6}" :md="2">
           <el-button type="primary" size="small" @click="uploadImg()">提 交</el-button>
@@ -56,12 +57,12 @@
 
 <script>
 import store from "@/store";
-import { VueCropper } from "vue-cropper";
-import { changeAvatar } from "@/api/user";
+import {VueCropper} from "vue-cropper";
+import {changeAvatar} from "@/api/user";
 import {uploadAvatar} from "@/api/permission/user";
 
 export default {
-  components: { VueCropper },
+  components: {VueCropper},
   props: {
     user: {
       type: Object
@@ -94,7 +95,7 @@ export default {
     let avatar = store.getters.avatar
     this.options.img = this.fileBase + (avatar && avatar != '' ? avatar : this.defaultAvatar);
     let splitAvatarPath = avatar.split('/')
-    this.fileName = splitAvatarPath[splitAvatarPath.length-1]
+    this.filename = splitAvatarPath[splitAvatarPath.length - 1]
   },
   methods: {
     // 编辑头像
@@ -123,13 +124,14 @@ export default {
     },
     // 上传预处理
     beforeUpload(file) {
-      if (file.type.indexOf("image/") == -1) {
+      if (file.type.indexOf("image/") === -1) {
         this.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。");
       } else {
+        this.filename = file.name;
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
-          console.log(reader)
+          // console.log(reader)
           this.options.img = reader.result;
         };
       }
@@ -142,7 +144,7 @@ export default {
         formData.append("img", fileOfBlob);
         changeAvatar(formData).then(response => {
           this.open = false;
-          if (response.code === 0){
+          if (response.code === 0) {
             let avatar = response.data.avatar
             this.options.img = this.fileBase + (avatar && avatar != '' ? avatar : this.defaultAvatar);
             store.commit("SET_AVATAR", avatar);
