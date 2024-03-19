@@ -162,7 +162,12 @@
       <el-table-column label="源分组" align="center" prop="group" width="130" :show-overflow-tooltip="true"
                        :formatter="groupFormat"/>
       <el-table-column label="文件路径" align="center" prop="path" :show-overflow-tooltip="true" width="200"
-                       v-if="fields.file_path"/>
+                       v-if="fields.file_path">
+        <template slot-scope="scope">
+          <span>{{ BASE_DIR }}{{ scope.row.path }}</span>
+        </template>
+
+      </el-table-column>
       <el-table-column label="是否存在" align="center" prop="is_exist" width="100">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.is_exist" disabled></el-switch>
@@ -487,6 +492,7 @@ export default {
         label: 'js',
         value: '.js'
       }, {label: 'txt', value: '.txt'}, {label: 'm3u', value: '.m3u'},{label: 'jar', value: '.jar'},],
+      BASE_DIR:'',//服务器程序默认路径
 
       // 上传源参数
       upload: {
@@ -561,6 +567,7 @@ export default {
       list(this.queryParams).then(response => {
           this.list = response.data.results
           this.total = response.data.total
+          this.BASE_DIR = response.data.BASE_DIR
           this.loading = false;
         }
       );
