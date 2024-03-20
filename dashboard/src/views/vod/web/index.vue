@@ -47,7 +47,7 @@ export default {
       HomeApi().then((resp) => {
         this.category = resp.class;
         //this.setItem('class', resp.class);
-        this.setItem('filters', resp.filters);
+        this.setItem('filters', resp.filters||{});
         this.setItem('recommend', resp.list);
         this.goHome();
       })
