@@ -161,6 +161,7 @@ export default {
       .logo {
         width: 30px;
         height: 30px;
+        // position: relative !important;
       }
       .title {
         margin-left: 10px;
