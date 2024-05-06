@@ -58,7 +58,7 @@ export default {
         console.log('config:', config)
         if (config.sites) {
           console.log('get config cost:', config.cost_time)
-          let hipy_sites = config.sites.filter(it => it.key.startsWith('hipy_t4')||it.key.startsWith('drpy_t4'))
+          let hipy_sites = config.sites.filter(it => it.key.startsWith('hipy_py')||it.key.startsWith('hipy_js'))
           console.log('hipy_sites from config:', hipy_sites)
           this.setItem('hipy_sites', hipy_sites);
           let cacheSite = cache.local.getJSON('hipy_site');
