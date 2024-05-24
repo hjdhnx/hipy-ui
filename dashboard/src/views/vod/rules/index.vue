@@ -50,6 +50,23 @@
           />
         </el-select>
       </el-form-item>
+
+      <el-form-item label="是否存在" prop="status">
+        <el-select
+          v-model="queryParams.is_exist"
+          placeholder=""
+          clearable
+          style="width: 60px"
+        >
+          <el-option
+            v-for="dict in existOptions"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -487,6 +504,7 @@ export default {
       // 默认排序
       defaultSort: {prop: 'order_num', order: 'ascending'},
       statusOptions: [],
+      existOptions: [{label: '是', value: true},{label: '否', value: false}],
       groupOptions: [],
       fileTypeOptions: [{label: 'py', value: '.py'}, {label: 'json', value: '.json'}, {
         label: 'js',
@@ -506,7 +524,8 @@ export default {
         // 是否更新已经存在的源
         updateSupport: true,
         // 源分组
-        group: 't4/spiders',
+        // group: 't4/spiders',
+        group: 't4/files/drpy_js',
         // 设置上传的请求头部
         headers: {Token: getToken(), 'Content-Type': 'multipart/form-data'},
         // 上传的地址
@@ -530,9 +549,11 @@ export default {
         page: 1,
         page_size: 10,
         name: undefined,
-        group: 't4/spiders',
+        // group: 't4/spiders',
+        group: 't4/files/drpy_js',
         file_type: undefined,
-        status: undefined
+        status: undefined,
+        is_exist: undefined,
       },
       // 表单参数
       form: {},
@@ -563,6 +584,9 @@ export default {
       this.loading = true;
       if (!this.queryParams.status && typeof (this.queryParams.status) === 'string') {
         this.queryParams.status = undefined;
+      }
+      if (typeof (this.queryParams.is_exist) !== 'boolean') {
+        this.queryParams.is_exist = undefined;
       }
       list(this.queryParams).then(response => {
           this.list = response.data.results
@@ -603,6 +627,7 @@ export default {
       this.dateRange = [];
       this.resetForm("queryForm");
       this.queryParams.page = 1;
+      this.queryParams.is_exist = undefined;
       this.$refs.tables.sort(this.defaultSort.prop, this.defaultSort.order)
     },
     /** 多选框选中数据 */
