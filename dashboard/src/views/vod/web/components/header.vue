@@ -18,8 +18,8 @@
     </div>
 
     <!-- 换源对话框 -->
-    <el-dialog :title="form_title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" label-width="120px">
+    <el-dialog :title="form_title" :visible.sync="open" width="600px" class="change_rule_dialog" append-to-body>
+      <el-form ref="form" :model="form" label-width="120px" class="change_rule_form">
         <div class="button-container">
           <div v-for="(site,index) in form.sites" :key="index" class="btn-item">
             <el-button
@@ -119,9 +119,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.change_rule_form {
+  max-height: 600px;
+}
+
 .button-container {
   width: 100%;
-  overflow: hidden;
+  max-height: 600px;
+  //overflow: hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
   display: flex;
   flex-wrap: wrap;
 
