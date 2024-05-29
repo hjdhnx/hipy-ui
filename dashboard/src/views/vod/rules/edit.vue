@@ -155,7 +155,7 @@ export default {
             this.form.rule_editable = data.editable;
 
             if (data.editable) {
-              getRawContent(data.url + '?t=' + new Date().getTime()).then(response => {
+              getRawContent(data.url + '?t=' + new Date().getTime()+'&raw=1').then(response => {
                 this.form.rule_code = response;
                 this.loading = false
               });
@@ -209,7 +209,7 @@ export default {
       this.handleQuery()
     },
     openUrl(url){
-      open(url+'?t='+new Date().getTime());
+      open(url+'?t='+new Date().getTime()+'&raw=1');
     },
     /** 复制按钮操作 */
     handleCopy(){

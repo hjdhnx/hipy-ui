@@ -674,7 +674,7 @@ export default {
     handleLink(row) {
       let group = this.groupOptions.find(x => x.value === row.group).label;
       let name = row.name + row.file_type;
-      let file_url = new URL(process.env.VUE_APP_BASE_API).origin + "/files/" + group + '/' + name+'?t='+new Date().getTime();
+      let file_url = new URL(process.env.VUE_APP_BASE_API).origin + "/files/" + group + '/' + name+'?t='+new Date().getTime()+'&raw=1';
       open(file_url);
     },
     handleHome(row) {
