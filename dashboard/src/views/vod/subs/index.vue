@@ -103,6 +103,28 @@
         >删除
         </el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          icon="el-icon-edit"
+          size="mini"
+          v-hasRole="['admin','opts']"
+          :disabled="multiple"
+          @click="handleEnable"
+        >设为启用
+        </el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          icon="el-icon-edit"
+          size="mini"
+          v-hasRole="['admin','opts']"
+          :disabled="multiple"
+          @click="handleDisable"
+        >设为禁用
+        </el-button>
+      </el-col>
 
       <el-col :span="1.5">
         <el-button
@@ -117,7 +139,7 @@
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="list" @selection-change="handleSelectionChange">i
+    <el-table v-loading="loading" :data="list" :default-sort="defaultSort" @selection-change="handleSelectionChange">i
       <el-table-column fixed="left" type="selection" width="55" align="center"/>
       <el-table-column label="ID" align="center" prop="id" width="55"/>
       <el-table-column label="订阅名称" align="center" prop="name" :show-overflow-tooltip="true"/>
@@ -254,10 +276,11 @@ import {
   addRecord,
   setRecord,
   delRecord,
+  enableRecords,
+  disableRecords,
 } from '@/api/vod/subs'
 import {parseTime} from "@/utils";
 import {generateRandomDigit, generateRandomString} from '@/utils/random'
-import {setOrderNum} from "@/api/vod/rules";
 
 export default {
   name: 'VodSubs',
@@ -279,6 +302,8 @@ export default {
       title: '',
       // 是否显示弹出层
       open: false,
+      // 默认排序
+      defaultSort: {prop: 'id', order: 'ascending'},
       statusOptions: [],
       matchOptions: [{label: '正向匹配', value: 0}, {label: '逆向排除', value: 1}],
       // 查询参数
@@ -510,6 +535,35 @@ export default {
         this.msgSuccess('删除成功')
       }).catch(function () {
       })
+    },
+
+    handelSetStatus(row, status) {
+      const ids = row.id || this.ids;
+      let desc = status === 1 ? '启用' : '禁用';
+      this.$confirm(`是否确认${desc}订阅ID为"` + ids + '"的数据项?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function () {
+        if (status === 1) {
+          return enableRecords(ids)
+        } else {
+          return disableRecords(ids)
+        }
+      }).then(() => {
+        this.getList()
+        this.msgSuccess('操作成功')
+      }).catch(function () {
+      })
+    },
+
+    /** 设为启用按钮操作 */
+    handleEnable(row) {
+      this.handelSetStatus(row, 1);
+    },
+    /** 设为禁用按钮操作 */
+    handleDisable(row) {
+      this.handelSetStatus(row, 0);
     },
 
     /** 导出按钮操作 */

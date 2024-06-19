@@ -47,3 +47,16 @@ export function delRecord(id) {
   })
 }
 
+export function enableRecords(ids) {
+  return request({
+    url: api_url + '/enable/' + ids,
+    method: 'put'
+  })
+}
+
+export function disableRecords(ids) {
+  return request({
+    url: api_url + '/disable/' + ids,
+    method: 'put'
+  })
+}
