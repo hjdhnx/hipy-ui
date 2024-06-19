@@ -32,6 +32,7 @@ export function addRecord(data) {
 
 // 修改
 export function setRecord(id, data) {
+  console.log(data);
   return request({
     url: api_url + '/' + id,
     method: 'put',

@@ -147,7 +147,13 @@
       <el-table-column label="订阅正则" align="center" prop="reg" :show-overflow-tooltip="true"/>
       <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat"/>
       <el-table-column label="匹配模式" align="center" prop="mode" :formatter="matchesFormat"/>
-      <el-table-column label="过期时间" align="center" prop="due_time" :show-overflow-tooltip="true"/>
+      <!--      <el-table-column label="过期时间" align="center" prop="due_time" :show-overflow-tooltip="true"/>-->
+      <el-table-column label="过期时间" align="center" prop="due_time" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.due_time) }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="创建时间" align="center" prop="created_ts" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.created_ts) }}</span>
@@ -229,6 +235,7 @@
           <div class="block">
             <el-date-picker
               v-model="form.due_time"
+              value-format="yyyy-MM-dd HH:mm:ss"
               type="datetime"
               placeholder="选择订阅过期时间"
               align="right"
