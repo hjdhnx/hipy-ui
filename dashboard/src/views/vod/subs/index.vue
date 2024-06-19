@@ -247,23 +247,40 @@
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
             <el-radio
-              v-for="dict in statusOptions"
+              v-for="(dict, index) in statusOptions"
               :key="dict.value"
               :label="dict.value"
             >{{ dict.label }}
             </el-radio>
+
           </el-radio-group>
+<!--          <el-select v-model="form.status">-->
+<!--            <el-option-->
+<!--              v-for="dict in statusOptions"-->
+<!--              :key="dict.value"-->
+<!--              :label="dict.label"-->
+<!--              :value="dict.value"-->
+<!--            />-->
+<!--          </el-select>-->
         </el-form-item>
 
         <el-form-item label="匹配模式" prop="mode">
           <el-radio-group v-model="form.mode">
             <el-radio
-              v-for="dict in matchOptions"
+              v-for="(dict, index) in matchOptions"
               :key="dict.value"
               :label="dict.value"
             >{{ dict.label }}
             </el-radio>
           </el-radio-group>
+<!--          <el-select v-model="form.mode">-->
+<!--            <el-option-->
+<!--              v-for="dict in matchOptions"-->
+<!--              :key="dict.value"-->
+<!--              :label="dict.label"-->
+<!--              :value="dict.value"-->
+<!--            />-->
+<!--          </el-select>-->
         </el-form-item>
 
       </el-form>
@@ -455,8 +472,8 @@ export default {
       this.reset()
       let default_value = {
         code: generateRandomString(6),
-        status: 1,
-        mode: 0,
+        // status: 1,
+        // mode: 0,
         reg: '.*'
       };
       Object.assign(this.form, default_value);
@@ -464,7 +481,7 @@ export default {
       this.title = '添加订阅'
       this.statusOptions.forEach(item => {
         if (item.is_default) this.form.status = item.value
-      })
+      });
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
