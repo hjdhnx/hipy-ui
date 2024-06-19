@@ -32,7 +32,8 @@
         />
       </el-form-item>
       <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="请选择订阅状态" clearable size="small" @change="handleQuery"
+        <el-select v-model="queryParams.status" placeholder="请选择订阅状态" clearable size="small"
+                   @change="handleQuery"
                    style="width: 80px">
           <el-option
             :key="undefined"
@@ -56,7 +57,7 @@
             :value="undefined"
           />
           <el-option
-            v-for="dict in statusOptions"
+            v-for="dict in matchOptions"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -123,7 +124,7 @@
       <el-table-column label="订阅代码" align="center" prop="code" :show-overflow-tooltip="true"/>
       <el-table-column label="订阅正则" align="center" prop="reg" :show-overflow-tooltip="true"/>
       <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat"/>
-      <el-table-column label="匹配模式" align="center" prop="mode" :formatter="statusFormat"/>
+      <el-table-column label="匹配模式" align="center" prop="mode" :formatter="matchesFormat"/>
       <el-table-column label="过期时间" align="center" prop="due_time" :show-overflow-tooltip="true"/>
       <el-table-column label="创建时间" align="center" prop="created_ts" :show-overflow-tooltip="true">
         <template slot-scope="scope">
@@ -153,6 +154,17 @@
             @click="handleDelete(scope.row)"
           >删除
           </el-button>
+          <el-dropdown size="mini" @command="(command) => handleCommand(command, scope.row)">
+            <el-button size="mini" type="text" icon="el-icon-d-arrow-right">更多</el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="handleT3" icon="el-icon-link" v-hasRole="['admin','opts']"
+              >T3配置
+              </el-dropdown-item>
+              <el-dropdown-item command="handleT4" icon="el-icon-link" v-hasRole="['admin','opts']"
+              >T4配置
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -162,6 +174,7 @@
       :total="total"
       :page.sync="queryParams.page"
       :limit.sync="queryParams.page_size"
+      :page-sizes="[10,15,20,40,60,80,100,150,200,300,500,1000]"
       @pagination="getList"
     />
 
@@ -181,13 +194,25 @@
           </el-col>
         </el-row>
 
-
         <el-form-item label="正则" prop="reg">
-          <el-input v-model="form.reg" placeholder="请输入正则表达式文本"/>
+          <el-input
+            type="textarea"
+            :rows="4"
+            placeholder="请输入正则表达式文本"
+            v-model="form.reg">
+          </el-input>
         </el-form-item>
 
-        <el-form-item label="过期时间" prop="due_time">
-          <el-input v-model="form.due_time" placeholder="请输入过期时间"/>
+        <el-form-item label="过期时间" prop="due_time" label-width="150px">
+          <div class="block">
+            <el-date-picker
+              v-model="form.due_time"
+              type="datetime"
+              placeholder="选择订阅过期时间"
+              align="right"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+          </div>
         </el-form-item>
 
         <el-form-item label="状态" prop="status">
@@ -201,14 +226,16 @@
           </el-radio-group>
         </el-form-item>
 
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="匹配模式" prop="mode">
-              <el-input v-model="form.mode" placeholder="请输入匹配模式: 0正向匹配 1逆向排除"/>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
+        <el-form-item label="匹配模式" prop="mode">
+          <el-radio-group v-model="form.mode">
+            <el-radio
+              v-for="dict in matchOptions"
+              :key="dict.value"
+              :label="dict.value"
+            >{{ dict.label }}
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -229,6 +256,8 @@ import {
   delRecord,
 } from '@/api/vod/subs'
 import {parseTime} from "@/utils";
+import {generateRandomDigit, generateRandomString} from '@/utils/random'
+import {setOrderNum} from "@/api/vod/rules";
 
 export default {
   name: 'VodSubs',
@@ -251,6 +280,7 @@ export default {
       // 是否显示弹出层
       open: false,
       statusOptions: [],
+      matchOptions: [{label: '正向匹配', value: 0}, {label: '逆向排除', value: 1}],
       // 查询参数
       queryParams: {
         page: 1,
@@ -273,12 +303,67 @@ export default {
         reg: [
           {required: true, message: '正则表达式字符串不能为空', trigger: 'blur'}
         ]
-      }
+      },
+      pickerOptions: {
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date());
+          }
+        }, {
+          text: '明天',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() + 3600 * 1000 * 24);
+            picker.$emit('pick', date);
+          }
+        }, {
+          text: '一周',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() + 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', date);
+          }
+        },
+          {
+            text: '一月',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', date);
+            }
+          },
+          {
+            text: '半年',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 30 * 6);
+              picker.$emit('pick', date);
+            }
+          },
+          {
+            text: '一年',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 365);
+              picker.$emit('pick', date);
+            }
+          },
+          {
+            text: '永久',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 365 * 99);
+              picker.$emit('pick', date);
+            }
+          }
+        ]
+      },
     }
   },
   created() {
     this.getList();
-    getDicts("com_default_status").then(response => {
+    getDicts("vod_rule_status").then(response => {
       this.statusOptions = response.data.details;
     })
   },
@@ -295,6 +380,10 @@ export default {
     // 字典状态字典翻译
     statusFormat(row, column) {
       return this.selectDictLabel(this.statusOptions, row.status);
+    },
+    // 匹配模式翻译
+    matchesFormat(row, column) {
+      return this.selectDictLabel(this.matchOptions, row.mode);
     },
     // 取消按钮
     cancel() {
@@ -332,6 +421,13 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset()
+      let default_value = {
+        code: generateRandomString(6),
+        status: 1,
+        mode: 0,
+        reg: '.*'
+      };
+      Object.assign(this.form, default_value);
       this.open = true
       this.title = '添加订阅'
       this.statusOptions.forEach(item => {
@@ -343,6 +439,24 @@ export default {
       this.ids = selection.map(item => item.id)
       this.single = selection.length !== 1
       this.multiple = !selection.length
+    },
+    // 更多操作触发
+    handleCommand(command, row) {
+      switch (command) {
+        case "handleT3":
+          this.handleConfig(row, 1);
+          break;
+        case "handleT4":
+          this.handleConfig(row, 0);
+          break;
+        default:
+          break;
+      }
+    },
+    handleConfig(row, mode) {
+      let code = row.code;
+      let file_url = new URL(process.env.VUE_APP_BASE_API).origin + `/config/${mode}?sub=${code}`;
+      open(file_url);
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
