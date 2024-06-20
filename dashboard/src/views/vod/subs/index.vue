@@ -254,14 +254,14 @@
             </el-radio>
 
           </el-radio-group>
-<!--          <el-select v-model="form.status">-->
-<!--            <el-option-->
-<!--              v-for="dict in statusOptions"-->
-<!--              :key="dict.value"-->
-<!--              :label="dict.label"-->
-<!--              :value="dict.value"-->
-<!--            />-->
-<!--          </el-select>-->
+          <!--          <el-select v-model="form.status">-->
+          <!--            <el-option-->
+          <!--              v-for="dict in statusOptions"-->
+          <!--              :key="dict.value"-->
+          <!--              :label="dict.label"-->
+          <!--              :value="dict.value"-->
+          <!--            />-->
+          <!--          </el-select>-->
         </el-form-item>
 
         <el-form-item label="匹配模式" prop="mode">
@@ -273,14 +273,14 @@
             >{{ dict.label }}
             </el-radio>
           </el-radio-group>
-<!--          <el-select v-model="form.mode">-->
-<!--            <el-option-->
-<!--              v-for="dict in matchOptions"-->
-<!--              :key="dict.value"-->
-<!--              :label="dict.label"-->
-<!--              :value="dict.value"-->
-<!--            />-->
-<!--          </el-select>-->
+          <!--          <el-select v-model="form.mode">-->
+          <!--            <el-option-->
+          <!--              v-for="dict in matchOptions"-->
+          <!--              :key="dict.value"-->
+          <!--              :label="dict.label"-->
+          <!--              :value="dict.value"-->
+          <!--            />-->
+          <!--          </el-select>-->
         </el-form-item>
 
       </el-form>
@@ -347,7 +347,8 @@ export default {
           {required: true, message: '订阅名称不能为空', trigger: 'blur'}
         ],
         code: [
-          {required: true, message: '订阅代码不能为空', trigger: 'blur'}
+          {required: true, message: '订阅代码不能为空', trigger: 'blur'},
+          {min: 6, message: "最小长度为6位字符", trigger: "blur"}
         ],
         reg: [
           {required: true, message: '正则表达式字符串不能为空', trigger: 'blur'}
