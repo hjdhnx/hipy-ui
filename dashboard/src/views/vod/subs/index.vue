@@ -334,9 +334,10 @@ export default {
       queryParams: {
         page: 1,
         page_size: 20,
-        name: undefined,
         code: undefined,
+        name: undefined,
         reg: undefined,
+        status: undefined,
         mode: undefined,
       },
       // 表单参数
@@ -444,10 +445,11 @@ export default {
     reset() {
       this.form = {
         id: undefined,
-        name: undefined,
         code: undefined,
+        name: undefined,
         reg: undefined,
-        due_time: undefined,
+        status: undefined,
+        mode: undefined,
       }
       this.resetForm('form')
     },
@@ -461,9 +463,10 @@ export default {
       this.queryParams = {
         page: 1,
         page_size: 20,
-        name: undefined,
         code: undefined,
+        name: undefined,
         reg: undefined,
+        status: undefined,
         mode: undefined,
       }
       this.handleQuery()
@@ -473,16 +476,16 @@ export default {
       this.reset()
       let default_value = {
         code: generateRandomString(6),
-        // status: 1,
-        // mode: 0,
+        status: 1,
+        mode: 0,
         reg: '.*'
       };
       Object.assign(this.form, default_value);
-      this.open = true
-      this.title = '添加订阅'
-      this.statusOptions.forEach(item => {
-        if (item.is_default) this.form.status = item.value
-      });
+      this.open = true;
+      this.title = '添加订阅';
+      // this.statusOptions.forEach(item => {
+      //   if (item.is_default) this.form.status = item.value
+      // });
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
