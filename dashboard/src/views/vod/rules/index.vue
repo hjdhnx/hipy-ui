@@ -291,7 +291,7 @@
     />
 
     <!-- 添加或修改源对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="400px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-row>
           <el-col :span="24">
@@ -332,9 +332,9 @@
           </el-col>
 
           <el-col :span="24">
-            <el-form-item label="ext扩展" prop="ext">
+            <el-form-item label="ext扩展" prop="ext" label-width="80" label-position="top">
               <el-input v-model="form.ext" placeholder="请输入源ext扩展" type="textarea"
-                        :rows="5" clearable/>
+                        :rows="8" clearable/>
             </el-form-item>
           </el-col>
 
