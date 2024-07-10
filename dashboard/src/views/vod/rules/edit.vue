@@ -147,7 +147,7 @@ export default {
             this.form.rule_url = data.url;
             if (data.url.endsWith('.py')) {
               this.editor.mode = 'python';
-            } else if (data.url.endsWith('.json') || data.url.endsWith('.js')) {
+            } else if (data.url.endsWith('.json') || data.url.endsWith('.js') || data.url.endsWith('.jsd')) {
               this.editor.mode = 'javascript';
             } else {
               this.editor.mode = 'txt';
