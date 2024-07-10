@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container">
+  <div id="liveTool" class="container-liveTool">
     <el-tabs v-model="activeTab" @tab-click="handleTabClick">
       <el-tab-pane label="EPG接口" name="epg"></el-tab-pane>
       <el-tab-pane label="直播源格式转换" name="formatConversion"></el-tab-pane>
@@ -431,6 +431,6 @@ export default {
 
 </script>
 
-<style scoped>
-@import './styles.css';
+<style lang="scss" scoped>
+@import './styles.scss';
 </style>
