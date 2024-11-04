@@ -18,10 +18,11 @@
     </div>
 
     <!-- 换源对话框 -->
-    <el-dialog :title="form_title" :visible.sync="open" width="600px" class="change_rule_dialog" append-to-body>
+    <el-dialog :title="form_title" :visible.sync="open" :width="dialogWidth" class="change_rule_dialog" append-to-body>
+      <el-input v-model="siteFilter" placeholder="请输入站源名称" class="site_filter_input"></el-input>
       <el-form ref="form" :model="form" label-width="120px" class="change_rule_form">
         <div class="button-container">
-          <div v-for="(site,index) in form.sites" :key="index" class="btn-item">
+          <div v-for="(site,index) in filteredSites" :key="index" :ref="site.key === form.new_site.key ? 'currentSite' : ''" class="btn-item">
             <el-button
               :type="form.new_site.key===site.key? 'success':'primary'"
               size="medium"
@@ -31,7 +32,7 @@
           </div>
         </div>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer dialog-footer-right">
         <el-button type="danger" @click="handleConfirmClear">清除缓存</el-button>
         <el-button type="primary" @click="handleConfirmChange">确认换源</el-button>
       </div>
@@ -58,11 +59,29 @@ export default {
       form: { sites: [], now_site: {}, new_site: {}},
       LogoImg,
       keywordRef: '',
-      title: 'hipy影视'
+      title: 'hipy影视',
+      siteFilter:''
     }
   },
   created() {
     this.getCache()
+  },
+  computed: {
+    filteredSites() {
+      // 将 input 和 site.name 都转换为小写，进行包含匹配
+      const inputLower = this.siteFilter.toLowerCase();
+      return this.siteFilter
+        ? this.form.sites.filter((site) => site.name.toLowerCase().includes(inputLower))
+        : this.form.sites;
+    },
+    dialogWidth() {
+      return window.innerWidth < 768 ? '100%' : '600px';
+    },
+  },
+  watch: {
+    open(newVal) {
+      if (newVal) this.scrollToCurrentSite();
+    },
   },
   methods: {
     handleSearch() {
@@ -95,6 +114,7 @@ export default {
     },
     handleChangeRule(rule) { // 临时换源
       this.form.new_site = rule
+      this.scrollToCurrentSite();
     },
     handleConfirmChange() { // 确认换源
       this.form.now_site = this.form.new_site
@@ -102,31 +122,77 @@ export default {
       cache.local.setJSON('hipy_site', this.form.now_site)
       location.href = '/vod/web/'
     },
-    handleConfirmClear() { // 清除缓存
-      this.$confirm('确认清除缓存？这将会重置已选首页源为配置里的第一个源')
-        .then(_ => {
-          cache.local.remove('hipy_site')
-          this.open = false
-          // 清除缓存自动处理换源的缓存接口问题
-          location.href = '/vod/web/'
+    scrollToCurrentSite() {
+      this.$nextTick(() => {
+        if (this.$refs.currentSite && this.$refs.currentSite.length > 0) {
+          const currentSite = this.$refs.currentSite[0];
+          currentSite.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
+    },
+    handleConfirmClear() {
+      // 清除缓存
+      this.$confirm('确认清除缓存？这将会重置已选首页源为配置里的第一个源', '确认框', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        modalClass: 'custom-confirm', // 自定义样式类
+        modalStyle: {
+          maxWidth: '90%', // 最大宽度为 90%
+          width: 'auto', // 宽度自适应内容
+          margin: '0 auto', // 居中对话框
+        },
+      })
+        .then(() => {
+          cache.local.remove('hipy_site');
+          this.open = false;
+          // 清除缓存后自动处理换源的缓存接口问题
+          location.href = '/vod/web/';
         })
-        .catch(_ => {
-        })
+        .catch(() => {
+          // 取消操作的处理
+        });
     }
+
   }
 }
 
 </script>
 
+<style lang="scss">
+.change_rule_dialog .el-dialog__body {
+  padding: 0 !important; /* 使用 !important 强制覆盖 */
+}
+</style>
+
 <style lang="scss" scoped>
 
 .change_rule_form {
-  max-height: 600px;
+  max-height: 400px;
+}
+
+.site_filter_input {
+  padding: 5px 5px 5px 5px;
+}
+
+.dialog-footer-left {
+  display: flex;
+  justify-content: flex-start; /* 将按钮对齐到左侧 */
+}
+
+.dialog-footer-right {
+  display: flex;
+  justify-content: flex-end; /* 将按钮对齐到右侧 */
+}
+
+.custom-confirm {
+  max-width: 90%; /* 最大宽度为 90% */
+  width: auto; /* 宽度自适应内容 */
 }
 
 .button-container {
   width: 100%;
-  max-height: 600px;
+  max-height: 400px;
   //overflow: hidden;
   overflow-y: scroll;
   overflow-x: hidden;
